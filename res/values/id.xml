@@ -2,5 +2,6 @@
 <resources>
     <item name="twitter_oauth_button" type="id"/>
     <item type="id" name="twitter_tweet"/>
+    <item type="id" name="button1"/>
     
 </resources>
