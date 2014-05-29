@@ -3,6 +3,7 @@ package jp.gecko655.earthquake;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +17,12 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        if (!TwitterUtil.hasAccessToken(this)) {
+            Intent intent = new Intent(this, TwitterOauthActivity.class);
+            startActivity(intent);
+            finish();
+        }
 		setContentView(R.layout.activity_main);
 
 		if (savedInstanceState == null) {

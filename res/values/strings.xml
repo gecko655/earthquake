@@ -8,4 +8,6 @@
     <string name="twitter_consumer_key">nFX5wjly7k4iIaoYeXhw4BWTV</string>
     <string name="twitter_consumer_secret">Yfqg172uhm0dqLCbsusSqEQCn7iy1ak4098MjjLY9nQbcOgiOT</string>
 
+    <string name="oauth_button">Oauth</string>
+
 </resources>
