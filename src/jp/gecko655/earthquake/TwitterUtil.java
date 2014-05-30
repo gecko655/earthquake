@@ -21,7 +21,8 @@ public class TwitterUtil {
      */
     public static Twitter getTwitterInstance(Context context) {
         String consumerKey = context.getString(R.string.twitter_consumer_key);
-        String consumerSecret = context.getString(R.string.twitter_consumer_secret);
+        String consumerSecret = context
+                .getString(R.string.twitter_consumer_secret);
 
         TwitterFactory factory = new TwitterFactory();
         Twitter twitter = factory.getInstance();
@@ -75,4 +76,3 @@ public class TwitterUtil {
         return loadAccessToken(context) != null;
     }
 }
-

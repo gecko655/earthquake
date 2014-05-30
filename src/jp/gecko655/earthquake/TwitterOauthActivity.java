@@ -15,32 +15,34 @@ import android.widget.Toast;
 
 public class TwitterOauthActivity extends Activity {
 
-	private String mCallbackURL;
-	private Twitter mTwitter;
-	private RequestToken mRequestToken;
-	public TwitterOauthActivity() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_twitter_oauth);
-		mCallbackURL = getString(R.string.twitter_callback_url);
-		mTwitter = TwitterUtil.getTwitterInstance(this);
-		findViewById(R.id.twitter_oauth_button).setOnClickListener(new OnClickListener(){
+    private String mCallbackURL;
+    private Twitter mTwitter;
+    private RequestToken mRequestToken;
 
-			@Override
-			public void onClick(View v) {
-				startAuthorize();
-				
-			}
-			
-		});
+    public TwitterOauthActivity() {
+        // TODO Auto-generated constructor stub
+    }
 
-	}
-	
-     /**
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_twitter_oauth);
+        mCallbackURL = getString(R.string.twitter_callback_url);
+        mTwitter = TwitterUtil.getTwitterInstance(this);
+        findViewById(R.id.twitter_oauth_button).setOnClickListener(
+                new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        startAuthorize();
+
+                    }
+
+                });
+
+    }
+
+    /**
      * OAuth認証（厳密には認可）を開始します。
      * 
      * @param listener
@@ -61,7 +63,8 @@ public class TwitterOauthActivity extends Activity {
             @Override
             protected void onPostExecute(String url) {
                 if (url != null) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    Intent intent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(url));
                     startActivity(intent);
                 } else {
                     // 失敗。。。
@@ -73,8 +76,7 @@ public class TwitterOauthActivity extends Activity {
 
     @Override
     public void onNewIntent(Intent intent) {
-        if (intent == null
-                || intent.getData() == null
+        if (intent == null || intent.getData() == null
                 || !intent.getData().toString().startsWith(mCallbackURL)) {
             return;
         }
@@ -84,7 +86,8 @@ public class TwitterOauthActivity extends Activity {
             @Override
             protected AccessToken doInBackground(String... params) {
                 try {
-                    return mTwitter.getOAuthAccessToken(mRequestToken, params[0]);
+                    return mTwitter.getOAuthAccessToken(mRequestToken,
+                            params[0]);
                 } catch (TwitterException e) {
                     e.printStackTrace();
                 }
