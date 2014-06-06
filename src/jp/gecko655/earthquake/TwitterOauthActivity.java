@@ -18,8 +18,10 @@ public class TwitterOauthActivity extends Activity {
     private String mCallbackURL;
     private Twitter mTwitter;
     private RequestToken mRequestToken;
+    private Activity mActivity;
 
     public TwitterOauthActivity() {
+        mActivity = this;
         // TODO Auto-generated constructor stub
     }
 
@@ -67,6 +69,7 @@ public class TwitterOauthActivity extends Activity {
                             Uri.parse(url));
                     startActivity(intent);
                 } else {
+                    showToast("Something Wrong?:"+mActivity.getClass().getName());
                     // 失敗。。。
                 }
             }

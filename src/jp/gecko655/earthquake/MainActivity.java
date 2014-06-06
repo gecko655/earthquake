@@ -1,6 +1,7 @@
 package jp.gecko655.earthquake;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import twitter4j.ResponseList;
@@ -27,6 +28,11 @@ import android.os.Build;
 
 public class MainActivity extends Activity {
     final static String TAG = "EARTH_MAIN";
+    private Activity mActivity;
+    
+    public MainActivity(){
+        mActivity = this;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,19 +104,19 @@ public class MainActivity extends Activity {
                         protected List<String> doInBackground(Void... params) {
                             try {
                                 twitter.updateStatus(editText.getText().toString());
-                                return null;
+                                return Arrays.asList("OK"); 
                             } catch (TwitterException e) {
                                 e.printStackTrace();
+                                return null;
                             }
-                            return null;
                         }
 
                         @Override
                         protected void onPostExecute(List<String> result) {
                             if (result != null) {
-                                Toast.makeText(rootView.getContext(), result.get(0), Toast.LENGTH_LONG).show();
+                                showToast(result.get(0));
                             } else {
-                                Log.d(TAG,"Result was null");
+                                showToast("Something Wrong?:"+ rootView.getContext().getClass().getName());
                             }
                         }
                     };
@@ -121,6 +127,10 @@ public class MainActivity extends Activity {
             });
             return rootView;
         }
+        private void showToast(String text) {
+            Toast.makeText(rootView.getContext(), text, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 }
