@@ -33,9 +33,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         if (!TwitterUtil.hasAccessToken(this)) {
-            Intent intent = new Intent(this, TwitterOauthActivity.class);
-            startActivity(intent);
-            finish();
+            getAccessToken();
         }
         setContentView(R.layout.activity_main);
 
@@ -43,6 +41,13 @@ public class MainActivity extends Activity {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment()).commit();
         }
+    }
+
+    private void getAccessToken() {
+        TwitterUtil.deleteAccessToken(this);
+        Intent intent = new Intent(this, TwitterOauthActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -59,7 +64,8 @@ public class MainActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_auth) {
+            getAccessToken();
             return true;
         }
         return super.onOptionsItemSelected(item);
