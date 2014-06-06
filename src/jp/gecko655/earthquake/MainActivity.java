@@ -12,6 +12,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,19 +20,20 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.os.Build;
 
 public class MainActivity extends Activity {
+    final static String TAG = "EARTH_MAIN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (!TwitterUtil.hasAccessToken(this)) {
-            Intent intent = new Intent(this, TwitterOauthActivity.class);
-            startActivity(intent);
-            finish();
+            getAccessToken();
         }
         setContentView(R.layout.activity_main);
 
@@ -41,9 +43,15 @@ public class MainActivity extends Activity {
         }
     }
 
+    private void getAccessToken() {
+        TwitterUtil.deleteAccessToken(this);
+        Intent intent = new Intent(this, TwitterOauthActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -55,7 +63,8 @@ public class MainActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_auth) {
+            getAccessToken();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -65,8 +74,9 @@ public class MainActivity extends Activity {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-        TextView textView;
+        EditText editText;
         Twitter twitter;
+        View rootView;
 
         public PlaceholderFragment() {
         }
@@ -74,9 +84,9 @@ public class MainActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container,
+            rootView = inflater.inflate(R.layout.fragment_main, container,
                     false);
-            textView = (TextView) rootView.findViewById(R.id.twitter_tweet);
+            editText = (EditText) rootView.findViewById(R.id.twitter_tweet);
             twitter = TwitterUtil.getTwitterInstance(rootView.getContext());
             Button button = (Button) rootView.findViewById(R.id.button1);
             button.setOnClickListener(new OnClickListener() {
@@ -87,13 +97,8 @@ public class MainActivity extends Activity {
                         @Override
                         protected List<String> doInBackground(Void... params) {
                             try {
-                                ResponseList<twitter4j.Status> timeline = twitter
-                                        .getHomeTimeline();
-                                List<String> list = new ArrayList<String>();
-                                for (twitter4j.Status status : timeline) {
-                                    list.add(status.getText());
-                                }
-                                return list;
+                                twitter.updateStatus(editText.getText().toString());
+                                return null;
                             } catch (TwitterException e) {
                                 e.printStackTrace();
                             }
@@ -103,8 +108,9 @@ public class MainActivity extends Activity {
                         @Override
                         protected void onPostExecute(List<String> result) {
                             if (result != null) {
-                                textView.setText(result.get(0));
+                                Toast.makeText(rootView.getContext(), result.get(0), Toast.LENGTH_LONG).show();
                             } else {
+                                Log.d(TAG,"Result was null");
                             }
                         }
                     };

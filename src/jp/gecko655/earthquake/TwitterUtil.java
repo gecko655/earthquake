@@ -75,4 +75,14 @@ public class TwitterUtil {
     public static boolean hasAccessToken(Context context) {
         return loadAccessToken(context) != null;
     }
+
+    public static void deleteAccessToken(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(PREF_NAME,
+                Context.MODE_PRIVATE);
+        preferences.edit().remove(TOKEN)
+            .remove(TOKEN_SECRET)
+            .commit();
+        
+    }
+
 }

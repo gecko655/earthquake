@@ -4,6 +4,7 @@
     <string name="app_name">地震Twitter</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_auth">Re-authentication</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="twitter_consumer_key">5c3ZBNzSGNhQ7BTOESQsEeJZt</string>
     <string name="twitter_consumer_secret">FOt0cLiM7Q6VKacp7gNE9nmTTLRqeFbu2z05DAFz1xbf8AbHgx</string>
