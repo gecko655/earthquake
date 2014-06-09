@@ -85,7 +85,7 @@ public class MainActivity extends Activity {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-        ListView listView;
+        static ListView listView;
         Twitter twitter;
         View rootView;
 
@@ -121,6 +121,7 @@ public class MainActivity extends Activity {
             listView = (ListView) rootView.findViewById(R.id.listView);
             StatusItemAdapter adapter = new StatusItemAdapter(rootView.getContext(),R.layout.status_item);
             adapter.add(new TweetItem(rootView.getContext(),"はらへ"));//For debug
+            adapter.add(new RetweetItem(rootView.getContext(), 475968127730057216L));//For debug
             listView.setAdapter(adapter);
             listView.setOnItemClickListener(new OnItemClickListener(){
 
@@ -135,6 +136,15 @@ public class MainActivity extends Activity {
                 
             });
             return rootView;
+        }
+        
+        public static void updateListView(){
+            if(listView!=null){
+                StatusItemAdapter adapter = (StatusItemAdapter) listView.getAdapter();
+                if(adapter!=null){
+                    adapter.notifyDataSetChanged();
+                }
+            }
         }
         private void showToast(String text) {
             Toast.makeText(rootView.getContext(), text, Toast.LENGTH_SHORT).show();
