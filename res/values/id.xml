@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="twitter_oauth_button" type="id"/>
-    <item type="id" name="twitter_tweet"/>
-    <item type="id" name="button1"/>
     <item type="id" name="action_auth"/>
+    <item type="id" name="newTweetButton"/>
+    <item type="id" name="newRetweetButton"/>
+    <item type="id" name="listView"/>
+    <item type="id" name="ScreenName"/>
+    <item type="id" name="TweetContent"/>
     
 </resources>
