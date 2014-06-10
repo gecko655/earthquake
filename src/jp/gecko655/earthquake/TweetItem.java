@@ -25,7 +25,10 @@ public class TweetItem extends StatusItem {
 
     @Override
     public String getContent() {
-        return content;
+        if(content!=null){
+            return content;
+        }
+        return "";
     }
 
     @Override
@@ -46,9 +49,9 @@ public class TweetItem extends StatusItem {
             @Override
             protected void onPostExecute(List<String> result) {
                 if (result != null) {
-                    showToast(context,result.get(0));
+                    showToast(result.get(0));
                 } else {
-                    showToast(context,"Something Wrong?:"+ context.getClass().getName());
+                    showToast("Something Wrong?:"+ context.getClass().getName());
                 }
             }
         };
@@ -56,7 +59,7 @@ public class TweetItem extends StatusItem {
 
     }
 
-    private void showToast(Context context,String text) {
+    private void showToast(String text) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
