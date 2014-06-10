@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -13,25 +14,21 @@ import twitter4j.Status;
 
 public final class RetweetItem extends StatusItem {
 
-    String screenName;
-    long statusId;
+    Status status;
     public RetweetItem(Context context, long statusId) {
         this.twitter = TwitterUtil.getTwitterInstance(context);
         this.context = context;
-        this.statusId = statusId;
-        getStatus();
+        getStatus(statusId);
 
     }
-    private void getStatus(){
+    private void getStatus(final long statusId){
         AsyncTask<Void, Void, List<Status>> task = new AsyncTask<Void, Void, List<Status>>() {
             @Override
             protected List<twitter4j.Status> doInBackground(Void... params) {
                 try {
                     //twitter.updateStatus(listView.getText().toString());
                     twitter4j.Status status = twitter.showStatus(statusId);
-                    List<twitter4j.Status> list =new ArrayList<twitter4j.Status>();
-                    list.add(status);
-                    return list;
+                    return Arrays.asList(status);
                 } catch (TwitterException e) {
                     e.printStackTrace();
                     return null;
@@ -42,11 +39,11 @@ public final class RetweetItem extends StatusItem {
             protected void onPostExecute(List<twitter4j.Status> result) {
                 if (result != null) {
                     //showToast(context,result.get(0).getText());//for debug
-                    content =result.get(0).getText();
-                    screenName = result.get(0).getUser().getScreenName();
+                    status = result.get(0);
+                    content =status.getText();
                     MainActivity.PlaceholderFragment.updateListView();
                 } else {
-                    showToast(context,"Something Wrong?:"+ context.getClass().getName());
+                    showToast("Something Wrong?:"+ context.getClass().getName());
                 }
             }
         };
@@ -55,20 +52,55 @@ public final class RetweetItem extends StatusItem {
 
     @Override
     public String getScreenName() {
-        return screenName;
+        if(status!=null){
+            return "@"+status.getUser().getScreenName();
+        }
+        return "";
     }
 
     @Override
     public String getContent() {
-        return content;
+        if(content!=null){
+            return content;
+        }
+        return "";
     }
 
     @Override
     public void statusUpdate() {
-        // TODO Auto-generated method stub
+        AsyncTask<Void, Void, List<Status>> task = new AsyncTask<Void, Void, List<Status>>() {
+            @Override
+            protected List<twitter4j.Status> doInBackground(Void... params) {
+                try {
+                    if(status.isRetweetedByMe()){
+                        Log.d("asdf","a");
+                        twitter.destroyStatus(status.getCurrentUserRetweetId());
+                    }
+                        Log.d("asdf","b");
+                    twitter4j.Status rtStatus = twitter.retweetStatus(status.getId());
+                    return Arrays.asList(rtStatus);
+                } catch (TwitterException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(List<twitter4j.Status> result) {
+                if (result != null) {
+                    twitter4j.Status rtStatus =result.get(0);
+                    showToast(rtStatus.getText() +" was Retweeted");
+                    MainActivity.PlaceholderFragment.updateListView();
+                } else {
+                    showToast("Something Wrong?:"+ context.getClass().getName());
+                }
+            }
+        };
+        task.execute();
+        getStatus(status.getId());
         
     }
-    private void showToast(Context context,String text) {
+    private void showToast(String text) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
