@@ -33,10 +33,8 @@ import android.os.Build;
 
 public class MainActivity extends Activity {
     final static String TAG = "EARTH_MAIN";
-    private Activity mActivity;
     
     public MainActivity(){
-        mActivity = this;
     }
 
     @Override
