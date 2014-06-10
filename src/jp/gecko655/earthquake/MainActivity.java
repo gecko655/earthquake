@@ -10,6 +10,7 @@ import twitter4j.TwitterException;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.ClipData.Item;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,18 +21,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Build;
 
 public class MainActivity extends Activity {
     final static String TAG = "EARTH_MAIN";
-    private Activity mActivity;
     
     public MainActivity(){
-        mActivity = this;
     }
 
     @Override
@@ -80,7 +83,7 @@ public class MainActivity extends Activity {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-        EditText editText;
+        static ListView listView;
         Twitter twitter;
         View rootView;
 
@@ -92,40 +95,54 @@ public class MainActivity extends Activity {
                 Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.fragment_main, container,
                     false);
-            editText = (EditText) rootView.findViewById(R.id.twitter_tweet);
             twitter = TwitterUtil.getTwitterInstance(rootView.getContext());
-            Button button = (Button) rootView.findViewById(R.id.button1);
-            button.setOnClickListener(new OnClickListener() {
+            Button newTweetButton = (Button) rootView.findViewById(R.id.newTweetButton);
+            Button newRetweetButton = (Button) rootView.findViewById(R.id.newRetweetButton);
+            newRetweetButton.setOnClickListener(new OnClickListener(){
 
                 @Override
                 public void onClick(View v) {
-                    AsyncTask<Void, Void, List<String>> task = new AsyncTask<Void, Void, List<String>>() {
-                        @Override
-                        protected List<String> doInBackground(Void... params) {
-                            try {
-                                twitter.updateStatus(editText.getText().toString());
-                                return Arrays.asList("OK"); 
-                            } catch (TwitterException e) {
-                                e.printStackTrace();
-                                return null;
-                            }
-                        }
-
-                        @Override
-                        protected void onPostExecute(List<String> result) {
-                            if (result != null) {
-                                showToast(result.get(0));
-                            } else {
-                                showToast("Something Wrong?:"+ rootView.getContext().getClass().getName());
-                            }
-                        }
-                    };
-                    task.execute();
-
+                    // TODO Auto-generated method stub
+                    
                 }
+                
+            });
+            newTweetButton.setOnClickListener(new OnClickListener(){
 
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    
+                }
+                
+            });
+            listView = (ListView) rootView.findViewById(R.id.listView);
+            StatusItemAdapter adapter = new StatusItemAdapter(rootView.getContext(),R.layout.status_item);
+            adapter.add(new TweetItem(rootView.getContext(),"はらへ"));//For debug
+            adapter.add(new RetweetItem(rootView.getContext(), 475968127730057216L));//For debug
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new OnItemClickListener(){
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                        int position, long id) {
+                    ListView listView = (ListView)parent;
+                    StatusItem item = (StatusItem)listView.getItemAtPosition(position);
+                    item.statusUpdate();
+                    
+                }
+                
             });
             return rootView;
+        }
+        
+        public static void updateListView(){
+            if(listView!=null){
+                StatusItemAdapter adapter = (StatusItemAdapter) listView.getAdapter();
+                if(adapter!=null){
+                    adapter.notifyDataSetChanged();
+                }
+            }
         }
         private void showToast(String text) {
             Toast.makeText(rootView.getContext(), text, Toast.LENGTH_SHORT).show();
