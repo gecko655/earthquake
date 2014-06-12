@@ -36,6 +36,7 @@
             android:layout_height="match_parent"
             android:text="140"
             android:textSize="30sp"
+            android:minWidth="90sp"
             />
         <Button
             android:id="@id/submitNewTweet"

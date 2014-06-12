@@ -3,17 +3,24 @@ package jp.gecko655.earthquake;
 import twitter4j.Twitter;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class NewTweetFragment extends Fragment{
 
     Twitter twitter;
     View rootView;
+    EditText newTweet;
+    TextView tweetLength;
 
     public NewTweetFragment() {
         // TODO Auto-generated constructor stub
@@ -26,6 +33,32 @@ public class NewTweetFragment extends Fragment{
                 false);
         twitter = TwitterUtil.getTwitterInstance(rootView.getContext());
         Button submit = (Button)rootView.findViewById(R.id.submitNewTweet);
+        tweetLength = (TextView)rootView.findViewById(R.id.newTweetLength);
+        newTweet = (EditText)rootView.findViewById(R.id.newTweet);
+        newTweet.addTextChangedListener(new TextWatcher(){
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                    int after) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                    int count) {
+                tweetLength.setText(String.valueOf(140 - s.length()));
+                
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+                
+            }
+            
+        });
+            
         submit.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v) {
