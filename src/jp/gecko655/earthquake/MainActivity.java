@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import jp.gecko655.earthquake.db.DBAdapter;
+import jp.gecko655.earthquake.db.DatabaseOpenHelper;
 import twitter4j.ResponseList;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -12,6 +14,8 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.ClipData.Item;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,6 +54,10 @@ public class MainActivity extends Activity {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment()).commit();
         }
+        /* Database Initialize*/
+        DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this.getApplicationContext());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        db.close();
     }
 
     private void getAccessToken() {
@@ -120,6 +128,17 @@ public class MainActivity extends Activity {
             });
             listView = (ListView) rootView.findViewById(R.id.listView);
             StatusItemAdapter adapter = new StatusItemAdapter(rootView.getContext(),R.layout.status_item);
+            DBAdapter dba = new DBAdapter(rootView.getContext().getApplicationContext());
+            dba.open();
+            Cursor c = dba.getAllNotes();
+            c.moveToFirst();
+            System.out.println(c.getCount());
+            String type = c.getString(1);
+            String content = c.getString(2);
+            System.out.println(type+" "+ content);
+            if(type.equals("TW")){
+                adapter.add(new TweetItem(rootView.getContext(),content));
+            }
             adapter.add(new TweetItem(rootView.getContext(),"はらへ"));//For debug
             adapter.add(new RetweetItem(rootView.getContext(), 475968127730057216L));//For debug
             listView.setAdapter(adapter);
