@@ -47,6 +47,7 @@ public class MainActivity extends Activity {
 
         if (!TwitterUtil.hasAccessToken(this)) {
             getAccessToken();
+            finish();
         }
         setContentView(R.layout.activity_main);
 
