@@ -8,4 +8,9 @@
     <item type="id" name="ScreenName"/>
     <item type="id" name="TweetContent"/>
     
+    <!-- fragment_new_tweet -->
+    <item type="id" name="newTweet"/>
+    <item type="id" name="newTweetLength"/>
+    <item type="id" name="submitNewTweet"/>
+    
 </resources>
