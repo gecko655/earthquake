@@ -1,22 +1,14 @@
 package jp.gecko655.earthquake;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import jp.gecko655.earthquake.db.DBAdapter;
 import jp.gecko655.earthquake.db.DatabaseOpenHelper;
-import twitter4j.ResponseList;
 import twitter4j.Twitter;
-import twitter4j.TwitterException;
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
-import android.content.ClipData.Item;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,11 +19,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Build;
 
@@ -93,9 +82,8 @@ public class MainActivity extends Activity {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-        static ListView listView;
-        Twitter twitter;
-        View rootView;
+        private static View rootView;
+        private static StatusItemAdapter adapter;
 
         public PlaceholderFragment() {
         }
@@ -105,7 +93,13 @@ public class MainActivity extends Activity {
                 Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.fragment_main, container,
                     false);
-            twitter = TwitterUtil.getTwitterInstance(rootView.getContext());
+
+            ListView listView = (ListView) rootView.findViewById(R.id.listView);
+            adapter = new StatusItemAdapter(rootView.getContext(),R.layout.status_item);
+            listView.setAdapter(adapter);            
+            updateListView();
+
+            /* listeners */
             Button newTweetButton = (Button) rootView.findViewById(R.id.newTweetButton);
             Button newRetweetButton = (Button) rootView.findViewById(R.id.newRetweetButton);
             newRetweetButton.setOnClickListener(new OnClickListener(){
@@ -128,28 +122,6 @@ public class MainActivity extends Activity {
                 }
                 
             });
-            listView = (ListView) rootView.findViewById(R.id.listView);
-            StatusItemAdapter adapter = new StatusItemAdapter(rootView.getContext(),R.layout.status_item);
-            DBAdapter dba = new DBAdapter(rootView.getContext().getApplicationContext());
-            dba.open();
-            Cursor c = dba.getAllNotes();
-            c.moveToFirst();
-            if(c.getCount()!=0){
-            for(c.moveToFirst();c.isAfterLast();c.moveToNext()){
-                System.out.println(c.getCount());
-                String type = c.getString(1);
-                String content = c.getString(2);
-                System.out.println(type+" "+ content);
-                if(type.equals("TW")){
-                    adapter.add(new TweetItem(rootView.getContext(),content));
-                }else if(type.equals("RT")){
-                    adapter.add(new TweetItem(rootView.getContext(),content));
-                }
-            }
-            }
-            adapter.add(new TweetItem(rootView.getContext(),"はらへ"));//For debug
-            adapter.add(new RetweetItem(rootView.getContext(), 475968127730057216L));//For debug
-            listView.setAdapter(adapter);
             listView.setOnItemClickListener(new OnItemClickListener(){
 
                 @Override
@@ -166,11 +138,23 @@ public class MainActivity extends Activity {
         }
         
         public static void updateListView(){
-            if(listView!=null){
-                StatusItemAdapter adapter = (StatusItemAdapter) listView.getAdapter();
-                if(adapter!=null){
-                    adapter.notifyDataSetChanged();
+            if(adapter!=null){
+                DBAdapter dba = new DBAdapter(rootView.getContext().getApplicationContext());
+                dba.open();
+                Cursor c = dba.getAllNotes();
+                if(c.moveToFirst()){
+                    do{
+                        String type = c.getString(1);
+                        String content = c.getString(2);
+                        if(type.equals("TW")){
+                            adapter.add(new TweetItem(rootView.getContext(),content));
+                        }else if(type.equals("RT")){
+                            adapter.add(new TweetItem(rootView.getContext(),content));
+                        }
+                    }while(c.moveToNext());
                 }
+                c.close();
+                adapter.notifyDataSetChanged();
             }
         }
         private void showToast(String text) {

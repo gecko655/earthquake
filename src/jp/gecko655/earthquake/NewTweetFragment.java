@@ -1,5 +1,6 @@
 package jp.gecko655.earthquake;
 
+import jp.gecko655.earthquake.db.DBAdapter;
 import twitter4j.Twitter;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ public class NewTweetFragment extends Fragment{
     View rootView;
     EditText newTweet;
     TextView tweetLength;
+    final private String TW="TW";
 
     public NewTweetFragment() {
         // TODO Auto-generated constructor stub
@@ -62,7 +64,14 @@ public class NewTweetFragment extends Fragment{
         submit.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v) {
-                getFragmentManager().popBackStack();
+                String submittedText = newTweet.getText().toString();
+                if(!submittedText.isEmpty()){
+                    DBAdapter dba = new DBAdapter(rootView.getContext().getApplicationContext());
+                    dba.open();
+                    dba.saveNote(TW, submittedText);
+                    dba.close();
+                    getFragmentManager().popBackStack();
+                }
             }
             
         });

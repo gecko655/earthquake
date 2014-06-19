@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.provider.VoicemailContract.Status;
 
 public class DBAdapter {
@@ -18,6 +17,11 @@ public class DBAdapter {
             {"RT","475968127730057216"}
     };
 
+    /**
+     * DBAdapter should call {@link DBAdapter#open() open()} before and 
+     * {@link DBAdapter#close() close()} after processing database.
+     * @param context context of application that deals with database, not the context of activity.
+     */
     public DBAdapter(Context context){
         this.context = context;
         dbHelper = new DatabaseOpenHelper(this.context);
