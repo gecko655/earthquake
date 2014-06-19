@@ -48,17 +48,18 @@ public class MainActivity extends Activity {
         if (!TwitterUtil.hasAccessToken(this)) {
             getAccessToken();
             finish();
+            return;
         }
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment()).commit();
+            /* Database Initialize*/
+            DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this.getApplicationContext());
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            db.close();
         }
-        /* Database Initialize*/
-        DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this.getApplicationContext());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        db.close();
     }
 
     private void getAccessToken() {
@@ -133,12 +134,18 @@ public class MainActivity extends Activity {
             dba.open();
             Cursor c = dba.getAllNotes();
             c.moveToFirst();
-            System.out.println(c.getCount());
-            String type = c.getString(1);
-            String content = c.getString(2);
-            System.out.println(type+" "+ content);
-            if(type.equals("TW")){
-                adapter.add(new TweetItem(rootView.getContext(),content));
+            if(c.getCount()!=0){
+            for(c.moveToFirst();c.isAfterLast();c.moveToNext()){
+                System.out.println(c.getCount());
+                String type = c.getString(1);
+                String content = c.getString(2);
+                System.out.println(type+" "+ content);
+                if(type.equals("TW")){
+                    adapter.add(new TweetItem(rootView.getContext(),content));
+                }else if(type.equals("RT")){
+                    adapter.add(new TweetItem(rootView.getContext(),content));
+                }
+            }
             }
             adapter.add(new TweetItem(rootView.getContext(),"はらへ"));//For debug
             adapter.add(new RetweetItem(rootView.getContext(), 475968127730057216L));//For debug

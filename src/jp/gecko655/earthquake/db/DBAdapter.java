@@ -24,7 +24,6 @@ public class DBAdapter {
     }
     public DBAdapter open() {
         db = dbHelper.getWritableDatabase();
-        saveNote(datas[0][0],datas[0][1]);
         return this;
     }
      
