@@ -97,7 +97,7 @@ public class MainActivity extends Activity {
             ListView listView = (ListView) rootView.findViewById(R.id.listView);
             adapter = new StatusItemAdapter(rootView.getContext(),R.layout.status_item);
             listView.setAdapter(adapter);            
-            updateListView();
+            notifyDBChange();
 
             /* listeners */
             Button newTweetButton = (Button) rootView.findViewById(R.id.newTweetButton);
@@ -140,8 +140,9 @@ public class MainActivity extends Activity {
             return rootView;
         }
         
-        public static void updateListView(){
+        public static void notifyDBChange(){
             if(adapter!=null){
+            	adapter.clear();
                 DBAdapter dba = new DBAdapter(rootView.getContext().getApplicationContext());
                 dba.open();
                 Cursor c = dba.getAllNotes();
@@ -152,13 +153,21 @@ public class MainActivity extends Activity {
                         if(type.equals("TW")){
                             adapter.add(new TweetItem(rootView.getContext(),content));
                         }else if(type.equals("RT")){
-                            adapter.add(new TweetItem(rootView.getContext(),content));
+                        	long statusId = Long.valueOf(content);
+                            adapter.add(new RetweetItem(rootView.getContext(),statusId));
                         }
                     }while(c.moveToNext());
                 }
                 c.close();
-                adapter.notifyDataSetChanged();
+                dba.close();
+                updateListView();
             }
+        }
+        
+        public static void  updateListView(){
+        	if(adapter!=null){
+                adapter.notifyDataSetChanged();
+        	}
         }
         private void showToast(String text) {
             Toast.makeText(rootView.getContext(), text, Toast.LENGTH_SHORT).show();

@@ -1,6 +1,5 @@
 package jp.gecko655.earthquake;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,15 +7,12 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.Status;
 
-public final class RetweetItem extends StatusItem {
+public final class RetweetItem extends StatusItem{
 
     Status status;
-    private boolean valid=false;
-    private boolean load=false;
     public RetweetItem(Context context, long statusId) {
         this.twitter = TwitterUtil.getTwitterInstance(context);
         this.context = context;
@@ -24,6 +20,8 @@ public final class RetweetItem extends StatusItem {
 
     }
     synchronized private void getStatus(final long statusId){
+
+
         AsyncTask<Void, Void, List<Status>> task = new AsyncTask<Void, Void, List<Status>>() {
             @Override
             protected List<twitter4j.Status> doInBackground(Void... params) {
@@ -40,32 +38,15 @@ public final class RetweetItem extends StatusItem {
             @Override
             protected void onPostExecute(List<twitter4j.Status> result) {
                 if (result != null) {
-                	valid=true;
-                	load=true;
-                    //showToast(context,result.get(0).getText());//for debug
                     status = result.get(0);
                     content =status.getText();
                     MainActivity.PlaceholderFragment.updateListView();
                 } else {
-                	valid=false;
-                	load=true;
-                    //showToast("Something Wrong?:"+ context.getClass().getName());
+                    showToast("Something Wrong?:"+ context.getClass().getName());
                 }
             }
         };
         task.execute();
-    }
-
-    synchronized public boolean isValid(){
-    	while(!load){
-    		try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
-    	return valid;
     }
 
     @Override
@@ -121,5 +102,4 @@ public final class RetweetItem extends StatusItem {
     private void showToast(String text) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
-
 }
