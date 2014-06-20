@@ -15,13 +15,15 @@ import twitter4j.Status;
 public final class RetweetItem extends StatusItem {
 
     Status status;
+    private boolean valid=false;
+    private boolean load=false;
     public RetweetItem(Context context, long statusId) {
         this.twitter = TwitterUtil.getTwitterInstance(context);
         this.context = context;
         getStatus(statusId);
 
     }
-    private void getStatus(final long statusId){
+    synchronized private void getStatus(final long statusId){
         AsyncTask<Void, Void, List<Status>> task = new AsyncTask<Void, Void, List<Status>>() {
             @Override
             protected List<twitter4j.Status> doInBackground(Void... params) {
@@ -38,16 +40,32 @@ public final class RetweetItem extends StatusItem {
             @Override
             protected void onPostExecute(List<twitter4j.Status> result) {
                 if (result != null) {
+                	valid=true;
+                	load=true;
                     //showToast(context,result.get(0).getText());//for debug
                     status = result.get(0);
                     content =status.getText();
                     MainActivity.PlaceholderFragment.updateListView();
                 } else {
-                    showToast("Something Wrong?:"+ context.getClass().getName());
+                	valid=false;
+                	load=true;
+                    //showToast("Something Wrong?:"+ context.getClass().getName());
                 }
             }
         };
         task.execute();
+    }
+
+    synchronized public boolean isValid(){
+    	while(!load){
+    		try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	return valid;
     }
 
     @Override
