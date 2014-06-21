@@ -10,12 +10,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "jishin.db";
     private static final int DB_VERSION = 1;
-    
 
-
-    public DatabaseOpenHelper(Context context){
+    public DatabaseOpenHelper(Context context) {
         this(context, DB_NAME, null, DB_VERSION);
     }
+
     public DatabaseOpenHelper(Context context, String name,
             CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -32,22 +31,24 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.beginTransaction();
-        try{
+        try {
             StringBuilder createSql = new StringBuilder();
             createSql.append("create table " + StatusDatum.TABLE_NAME + " (");
-            createSql.append(StatusDatum.COLUMN_ID + " integer primary key autoincrement not null,");
-            createSql.append(StatusDatum.COLUMN_KIND+ " text not null,");
-            createSql.append(StatusDatum.COLUMN_CONTENT+ " text not null");
+            createSql.append(StatusDatum.COLUMN_ID
+                    + " integer primary key autoincrement not null,");
+            createSql.append(StatusDatum.COLUMN_KIND + " text not null,");
+            createSql.append(StatusDatum.COLUMN_CONTENT + " text not null");
             createSql.append(")");
             db.execSQL(createSql.toString());
             db.setTransactionSuccessful();
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally{
+        } finally {
             db.endTransaction();
         }
-        Cursor c = db.query(StatusDatum.TABLE_NAME, null, null, null, null, null, null);
+        Cursor c = db.query(StatusDatum.TABLE_NAME, null, null, null, null,
+                null, null);
     }
 
     @Override

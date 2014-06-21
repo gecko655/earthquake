@@ -1,6 +1,5 @@
 package jp.gecko655.earthquake;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,25 +7,30 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.Status;
 
 public final class RetweetItem extends StatusItem {
 
     Status status;
-    public RetweetItem(Context context, long statusId) {
+    long statusId;
+
+    public RetweetItem(long dbId, Context context, long statusId) {
+        this.dbId = dbId;
         this.twitter = TwitterUtil.getTwitterInstance(context);
         this.context = context;
+        this.statusId=statusId;
         getStatus(statusId);
 
     }
-    private void getStatus(final long statusId){
+
+    synchronized private void getStatus(final long statusId) {
+
         AsyncTask<Void, Void, List<Status>> task = new AsyncTask<Void, Void, List<Status>>() {
             @Override
             protected List<twitter4j.Status> doInBackground(Void... params) {
                 try {
-                    //twitter.updateStatus(listView.getText().toString());
+                    // twitter.updateStatus(listView.getText().toString());
                     twitter4j.Status status = twitter.showStatus(statusId);
                     return Arrays.asList(status);
                 } catch (TwitterException e) {
@@ -38,12 +42,12 @@ public final class RetweetItem extends StatusItem {
             @Override
             protected void onPostExecute(List<twitter4j.Status> result) {
                 if (result != null) {
-                    //showToast(context,result.get(0).getText());//for debug
                     status = result.get(0);
-                    content =status.getText();
+                    content = status.getText();
                     MainActivity.PlaceholderFragment.updateListView();
                 } else {
-                    showToast("Something Wrong?:"+ context.getClass().getName());
+                    content ="Tweet not found.";
+                    MainActivity.PlaceholderFragment.updateListView();
                 }
             }
         };
@@ -52,18 +56,18 @@ public final class RetweetItem extends StatusItem {
 
     @Override
     public String getScreenName() {
-        if(status!=null){
-            return "@"+status.getUser().getScreenName();
+        if (status != null) {
+            return "@" + status.getUser().getScreenName();
         }
         return "";
     }
 
     @Override
     public String getContent() {
-        if(content!=null){
+        if (content != null) {
             return content;
         }
-        return "";
+        return "Loading...";
     }
 
     @Override
@@ -72,12 +76,14 @@ public final class RetweetItem extends StatusItem {
             @Override
             protected List<twitter4j.Status> doInBackground(Void... params) {
                 try {
-                    if(status.isRetweetedByMe()){
-                        Log.d("asdf","a");
+                    if(status==null){
+                        status = twitter.showStatus(statusId);
+                    }
+                    if (status.isRetweetedByMe()) {
                         twitter.destroyStatus(status.getCurrentUserRetweetId());
                     }
-                        Log.d("asdf","b");
-                    twitter4j.Status rtStatus = twitter.retweetStatus(status.getId());
+                    twitter4j.Status rtStatus = twitter.retweetStatus(status
+                            .getId());
                     return Arrays.asList(rtStatus);
                 } catch (TwitterException e) {
                     e.printStackTrace();
@@ -88,20 +94,23 @@ public final class RetweetItem extends StatusItem {
             @Override
             protected void onPostExecute(List<twitter4j.Status> result) {
                 if (result != null) {
-                    twitter4j.Status rtStatus =result.get(0);
-                    showToast(rtStatus.getText() +" was Retweeted");
+                    twitter4j.Status rtStatus = result.get(0);
+                    showToast(rtStatus.getText() + " was Retweeted");
                     MainActivity.PlaceholderFragment.updateListView();
                 } else {
-                    showToast("Something Wrong?:"+ context.getClass().getName());
+                    showToast("Something Wrong?:"
+                            + context.getClass().getName());
                 }
             }
         };
         task.execute();
-        getStatus(status.getId());
-        
+        if(status!=null){
+            getStatus(status.getId());
+        }
+
     }
+
     private void showToast(String text) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
-
 }

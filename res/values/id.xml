@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="twitter_oauth_button" type="id"/>
+    <!-- menus -->
     <item type="id" name="action_auth"/>
+    <item type="id" name="action_reload"/>
+
+    <!-- fragment main -->
     <item type="id" name="newTweetButton"/>
     <item type="id" name="newRetweetButton"/>
     <item type="id" name="listView"/>
     <item type="id" name="ScreenName"/>
     <item type="id" name="TweetContent"/>
+    <item type="id" name="deleteButton"/>
     
     <!-- fragment_new_tweet -->
     <item type="id" name="newTweet"/>
     <item type="id" name="newTweetLength"/>
     <item type="id" name="submitNewTweet"/>
+
+    <!-- fragment_new_retweet -->
+    <item type="id" name="newRetweet"/>
+    <item type="id" name="submitNewRetweet"/>
     
 </resources>

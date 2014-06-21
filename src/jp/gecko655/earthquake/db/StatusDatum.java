@@ -8,6 +8,7 @@ public class StatusDatum implements Serializable {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_KIND = "kind";
     public static final String COLUMN_CONTENT = "content";
+
     public StatusDatum() {
         // TODO Auto-generated constructor stub
     }
