@@ -72,6 +72,8 @@ public class NewTweetFragment extends Fragment {
                     long dbId = dba.saveNote(TW, submittedText);
                     dba.close();
                     MainActivity.PlaceholderFragment.addItemById(dbId);
+                    showToast("New tweet was created:\n"
+                        + "\t"+submittedText);
                     getFragmentManager().popBackStack();
                 }
             }

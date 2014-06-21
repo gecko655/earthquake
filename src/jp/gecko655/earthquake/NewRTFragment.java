@@ -95,7 +95,6 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
         if (data == null) {
             showToast("Invalid tweet id");
         } else {
-            showToast("Created new RT");
             String idString = String.valueOf(data.getId());
             DBAdapter dba = new DBAdapter(rootView.getContext()
                     .getApplicationContext());
@@ -103,6 +102,9 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
             long dbId = dba.saveNote(RT, idString);
             dba.close();
             MainActivity.PlaceholderFragment.addItemById(dbId);
+            showToast("New RT was created:\n"
+                    + "@"+ data.getUser().getScreenName()+ "\n"
+                    + "\t"+data.getText()+"\n");
             Handler handler = new Handler();
             handler.post(new Runnable() {
                 @Override
