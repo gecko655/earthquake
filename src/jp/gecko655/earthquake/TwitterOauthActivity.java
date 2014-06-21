@@ -69,7 +69,8 @@ public class TwitterOauthActivity extends Activity {
                             Uri.parse(url));
                     startActivity(intent);
                 } else {
-                    showToast("Something Wrong?:"+mActivity.getClass().getName());
+                    showToast("Something Wrong?:"
+                            + mActivity.getClass().getName());
                     // 失敗。。。
                 }
             }

@@ -1,6 +1,5 @@
 package jp.gecko655.earthquake;
 
-
 import jp.gecko655.earthquake.db.DBAdapter;
 import jp.gecko655.earthquake.db.DatabaseOpenHelper;
 import twitter4j.Twitter;
@@ -26,8 +25,8 @@ import android.os.Build;
 
 public class MainActivity extends Activity {
     final static String TAG = "EARTH_MAIN";
-    
-    public MainActivity(){
+
+    public MainActivity() {
     }
 
     @Override
@@ -44,8 +43,9 @@ public class MainActivity extends Activity {
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment()).commit();
-            /* Database Initialize*/
-            DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(this.getApplicationContext());
+            /* Database Initialize */
+            DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(
+                    this.getApplicationContext());
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             db.close();
         }
@@ -95,82 +95,89 @@ public class MainActivity extends Activity {
                     false);
 
             ListView listView = (ListView) rootView.findViewById(R.id.listView);
-            adapter = new StatusItemAdapter(rootView.getContext(),R.layout.status_item);
-            listView.setAdapter(adapter);            
+            adapter = new StatusItemAdapter(rootView.getContext(),
+                    R.layout.status_item);
+            listView.setAdapter(adapter);
             notifyDBChange();
 
             /* listeners */
-            Button newTweetButton = (Button) rootView.findViewById(R.id.newTweetButton);
-            Button newRetweetButton = (Button) rootView.findViewById(R.id.newRetweetButton);
-            newRetweetButton.setOnClickListener(new OnClickListener(){
+            Button newTweetButton = (Button) rootView
+                    .findViewById(R.id.newTweetButton);
+            Button newRetweetButton = (Button) rootView
+                    .findViewById(R.id.newRetweetButton);
+            newRetweetButton.setOnClickListener(new OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
                     getFragmentManager().beginTransaction()
-                        .replace(R.id.container, new NewRTFragment())
-                        .addToBackStack(null)
-                        .commit();
-                    
+                            .replace(R.id.container, new NewRTFragment())
+                            .addToBackStack(null).commit();
+
                 }
-                
+
             });
-            newTweetButton.setOnClickListener(new OnClickListener(){
+            newTweetButton.setOnClickListener(new OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
                     getFragmentManager().beginTransaction()
-                        .replace(R.id.container, new NewTweetFragment())
-                        .addToBackStack(null)
-                        .commit();
+                            .replace(R.id.container, new NewTweetFragment())
+                            .addToBackStack(null).commit();
                 }
-                
+
             });
-            listView.setOnItemClickListener(new OnItemClickListener(){
+            listView.setOnItemClickListener(new OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                         int position, long id) {
-                    ListView listView = (ListView)parent;
-                    StatusItem item = (StatusItem)listView.getItemAtPosition(position);
+                    ListView listView = (ListView) parent;
+                    StatusItem item = (StatusItem) listView
+                            .getItemAtPosition(position);
                     item.statusUpdate();
-                    
+
                 }
-                
+
             });
             return rootView;
         }
-        
-        public static void notifyDBChange(){
-            if(adapter!=null){
-            	adapter.clear();
-                DBAdapter dba = new DBAdapter(rootView.getContext().getApplicationContext());
+
+        public static void notifyDBChange() {
+            if (adapter != null) {
+                adapter.clear();
+                DBAdapter dba = new DBAdapter(rootView.getContext()
+                        .getApplicationContext());
                 dba.open();
                 Cursor c = dba.getAllNotes();
-                if(c.moveToFirst()){
-                    do{
+                if (c.moveToFirst()) {
+                    do {
                         String type = c.getString(1);
                         String content = c.getString(2);
-                        if(type.equals("TW")){
-                            adapter.add(new TweetItem(rootView.getContext(),content));
-                        }else if(type.equals("RT")){
-                        	long statusId = Long.valueOf(content);
-                            adapter.add(new RetweetItem(rootView.getContext(),statusId));
+                        if (type.equals("TW")) {
+                            adapter.add(new TweetItem(rootView.getContext(),
+                                    content));
+                        } else if (type.equals("RT")) {
+                            long statusId = Long.valueOf(content);
+                            adapter.add(new RetweetItem(rootView.getContext(),
+                                    statusId));
                         }
-                    }while(c.moveToNext());
+                    } while (c.moveToNext());
                 }
                 c.close();
                 dba.close();
                 updateListView();
             }
         }
-        
-        public static void  updateListView(){
-        	if(adapter!=null){
+
+        public static void updateListView() {
+            if (adapter != null) {
                 adapter.notifyDataSetChanged();
-        	}
+            }
         }
+
         private void showToast(String text) {
-            Toast.makeText(rootView.getContext(), text, Toast.LENGTH_SHORT).show();
+            Toast.makeText(rootView.getContext(), text, Toast.LENGTH_SHORT)
+                    .show();
         }
 
     }

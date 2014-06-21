@@ -16,13 +16,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class NewTweetFragment extends Fragment{
+public class NewTweetFragment extends Fragment {
 
     Twitter twitter;
     View rootView;
     EditText newTweet;
     TextView tweetLength;
-    final private String TW="TW";
+    final private String TW = "TW";
 
     public NewTweetFragment() {
         // TODO Auto-generated constructor stub
@@ -34,48 +34,48 @@ public class NewTweetFragment extends Fragment{
         rootView = inflater.inflate(R.layout.fragment_new_tweet, container,
                 false);
         twitter = TwitterUtil.getTwitterInstance(rootView.getContext());
-        Button submit = (Button)rootView.findViewById(R.id.submitNewTweet);
-        tweetLength = (TextView)rootView.findViewById(R.id.newTweetLength);
-        newTweet = (EditText)rootView.findViewById(R.id.newTweet);
-        newTweet.addTextChangedListener(new TextWatcher(){
+        Button submit = (Button) rootView.findViewById(R.id.submitNewTweet);
+        tweetLength = (TextView) rootView.findViewById(R.id.newTweetLength);
+        newTweet = (EditText) rootView.findViewById(R.id.newTweet);
+        newTweet.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
                     int after) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
                     int count) {
                 tweetLength.setText(String.valueOf(140 - s.length()));
-                
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 // TODO Auto-generated method stub
-                
+
             }
-            
+
         });
-            
-        submit.setOnClickListener(new OnClickListener(){
+
+        submit.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 String submittedText = newTweet.getText().toString();
-                if(!submittedText.isEmpty()){
-                    DBAdapter dba = new DBAdapter(rootView.getContext().getApplicationContext());
+                if (!submittedText.isEmpty()) {
+                    DBAdapter dba = new DBAdapter(rootView.getContext()
+                            .getApplicationContext());
                     dba.open();
                     dba.saveNote(TW, submittedText);
                     dba.close();
                     getFragmentManager().popBackStack();
                 }
             }
-            
+
         });
-        
 
         return rootView;
     }

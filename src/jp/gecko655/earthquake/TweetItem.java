@@ -12,6 +12,7 @@ import android.widget.Toast;
 public class TweetItem extends StatusItem {
 
     String content;
+
     public TweetItem(Context context, String content) {
         this.content = content;
         this.twitter = TwitterUtil.getTwitterInstance(context);
@@ -25,7 +26,7 @@ public class TweetItem extends StatusItem {
 
     @Override
     public String getContent() {
-        if(content!=null){
+        if (content != null) {
             return content;
         }
         return "";
@@ -37,9 +38,10 @@ public class TweetItem extends StatusItem {
             @Override
             protected List<String> doInBackground(Void... params) {
                 try {
-                    //twitter.updateStatus(listView.getText().toString());
-                    twitter.updateStatus(getContent()+System.currentTimeMillis());
-                    return Arrays.asList("OK"); 
+                    // twitter.updateStatus(listView.getText().toString());
+                    twitter.updateStatus(getContent()
+                            + System.currentTimeMillis());
+                    return Arrays.asList("OK");
                 } catch (TwitterException e) {
                     e.printStackTrace();
                     return null;
@@ -51,7 +53,8 @@ public class TweetItem extends StatusItem {
                 if (result != null) {
                     showToast(result.get(0));
                 } else {
-                    showToast("Something Wrong?:"+ context.getClass().getName());
+                    showToast("Something Wrong?:"
+                            + context.getClass().getName());
                 }
             }
         };
@@ -63,5 +66,4 @@ public class TweetItem extends StatusItem {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
-        
 }
