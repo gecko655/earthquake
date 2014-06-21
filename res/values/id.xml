@@ -7,10 +7,15 @@
     <item type="id" name="listView"/>
     <item type="id" name="ScreenName"/>
     <item type="id" name="TweetContent"/>
+    <item type="id" name="deleteButton"/>
     
     <!-- fragment_new_tweet -->
     <item type="id" name="newTweet"/>
     <item type="id" name="newTweetLength"/>
     <item type="id" name="submitNewTweet"/>
+
+    <!-- fragment_new_retweet -->
+    <item type="id" name="newRetweet"/>
+    <item type="id" name="submitNewRetweet"/>
     
 </resources>

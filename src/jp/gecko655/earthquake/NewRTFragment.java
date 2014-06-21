@@ -36,11 +36,11 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_new_tweet, container,
+        rootView = inflater.inflate(R.layout.fragment_new_retweet, container,
                 false);
         twitter = TwitterUtil.getTwitterInstance(rootView.getContext());
-        Button submit = (Button) rootView.findViewById(R.id.submitNewTweet);
-        newRTId = (EditText) rootView.findViewById(R.id.newTweet);
+        Button submit = (Button) rootView.findViewById(R.id.submitNewRetweet);
+        newRTId = (EditText) rootView.findViewById(R.id.newRetweet);
         newRTId.setText("479847023424708608");
         newRTId.addTextChangedListener(new TextWatcher() {
 

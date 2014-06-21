@@ -13,11 +13,13 @@ import twitter4j.Status;
 public final class RetweetItem extends StatusItem {
 
     Status status;
+    long statusId;
 
     public RetweetItem(long dbId, Context context, long statusId) {
         this.dbId = dbId;
         this.twitter = TwitterUtil.getTwitterInstance(context);
         this.context = context;
+        this.statusId=statusId;
         getStatus(statusId);
 
     }
@@ -74,11 +76,12 @@ public final class RetweetItem extends StatusItem {
             @Override
             protected List<twitter4j.Status> doInBackground(Void... params) {
                 try {
+                    if(status==null){
+                        status = twitter.showStatus(statusId);
+                    }
                     if (status.isRetweetedByMe()) {
-                        Log.d("asdf", "a");
                         twitter.destroyStatus(status.getCurrentUserRetweetId());
                     }
-                    Log.d("asdf", "b");
                     twitter4j.Status rtStatus = twitter.retweetStatus(status
                             .getId());
                     return Arrays.asList(rtStatus);
@@ -101,7 +104,9 @@ public final class RetweetItem extends StatusItem {
             }
         };
         task.execute();
-        getStatus(status.getId());
+        if(status!=null){
+            getStatus(status.getId());
+        }
 
     }
 

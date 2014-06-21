@@ -171,15 +171,14 @@ public class MainActivity extends Activity {
                 updateListView();
             }
         }
-        public static void addItemById(long id) {
+        public static void addItemById(long dbId) {
             if(adapter!=null){
                 DBAdapter dba = new DBAdapter(rootView.getContext()
                         .getApplicationContext());
                 dba.open();
-                Cursor c = dba.getStatusById(id);
+                Cursor c = dba.getStatusById(dbId);
                 if (c.moveToFirst()) {
                     do {
-                        long dbId = c.getLong(0);
                         String type = c.getString(1);
                         String content = c.getString(2);
                         if (type.equals("TW")) {
@@ -197,6 +196,17 @@ public class MainActivity extends Activity {
             }
             updateListView();
         }
+
+        public static void deleteItemById(Long dbId) {
+            DBAdapter dba = new DBAdapter(rootView.getContext()
+                    .getApplicationContext());
+            dba.open();
+            dba.deleteStatus(dbId);
+            dba.close();
+            adapter.remove(dbId);
+            updateListView();
+        }
+
 
         public static void updateListView() {
             if (adapter != null) {

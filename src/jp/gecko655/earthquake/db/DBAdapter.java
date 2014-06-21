@@ -45,7 +45,7 @@ public class DBAdapter {
         return db.delete(StatusDatum.TABLE_NAME, null, null) > 0;
     }
 
-    public boolean deleteStatus(int id) {
+    public boolean deleteStatus(long id) {
         return db.delete(StatusDatum.TABLE_NAME, Status._ID + "=" + id, null) > 0;
     }
 

@@ -17,6 +17,7 @@
     <string name="newRetweetButton">Create New RT</string>
     
     <string name="newTweetHint">Input New Tweet</string>
+    <string name="newRetweetHint">Input Tweet Id to create new RT</string>
     <string name="register">Register</string>
     
 
