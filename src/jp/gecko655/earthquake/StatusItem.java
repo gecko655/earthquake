@@ -15,4 +15,8 @@ public abstract class StatusItem {
 
     public abstract void statusUpdate();
 
+    public Long getDBId() {
+        return dbId;
+    }
+
 }

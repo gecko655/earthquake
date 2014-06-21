@@ -1,7 +1,9 @@
 package jp.gecko655.earthquake;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ public class StatusItemAdapter extends ArrayAdapter<StatusItem> {
     private int textViewResourceId;
     private List<StatusItem> items;
     private LayoutInflater inflater;
+    private Set<Long> dbIds;
 
     public StatusItemAdapter(Context context, int resource) {
         this(context, resource, new ArrayList<StatusItem>());
@@ -29,18 +32,28 @@ public class StatusItemAdapter extends ArrayAdapter<StatusItem> {
         this.items = items;
         this.inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.dbIds = new HashSet<Long>();
+        for(StatusItem item: items){
+            dbIds.add(item.getDBId());
+        }
     }
 
     @Override
     public void add(StatusItem item) {
         super.add(item);
         items.add(item);
+        dbIds.add(item.getDBId());
     }
 
     @Override
     public void remove(StatusItem item) {
         super.remove(item);
         items.remove(item);
+        dbIds.remove(item.getDBId());
+    }
+    
+    public boolean containsId(long dbId){
+        return dbIds.contains(dbId);
     }
 
     @Override

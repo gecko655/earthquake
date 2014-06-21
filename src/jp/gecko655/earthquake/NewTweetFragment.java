@@ -69,8 +69,9 @@ public class NewTweetFragment extends Fragment {
                     DBAdapter dba = new DBAdapter(rootView.getContext()
                             .getApplicationContext());
                     dba.open();
-                    dba.saveNote(TW, submittedText);
+                    long dbId = dba.saveNote(TW, submittedText);
                     dba.close();
+                    MainActivity.PlaceholderFragment.addItemById(dbId);
                     getFragmentManager().popBackStack();
                 }
             }

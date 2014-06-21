@@ -100,14 +100,14 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
             DBAdapter dba = new DBAdapter(rootView.getContext()
                     .getApplicationContext());
             dba.open();
-            dba.saveNote(RT, idString);
+            long dbId = dba.saveNote(RT, idString);
             dba.close();
-            MainActivity.PlaceholderFragment.notifyDBChange();
+            MainActivity.PlaceholderFragment.addItemById(dbId);
             Handler handler = new Handler();
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    NewRTFragment.this.getFragmentManager().popBackStack();
+                    NewRTFragment.this.getFragmentManager().beginTransaction().remove(NewRTFragment.this).commit();
                 }
             });
         }

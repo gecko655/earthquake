@@ -58,7 +58,7 @@ public class DBAdapter {
     public Cursor getStatusById(long statusId){
         Cursor c = null;
         String[] selectionArgs = {String.valueOf(statusId)};
-        c = db.query(StatusDatum.TABLE_NAME, null, "id = ?", selectionArgs, null, null, null);
+        c = db.query(StatusDatum.TABLE_NAME, null, "_id = ?", selectionArgs, null, null, null);
         return c;
     }
 

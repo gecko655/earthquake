@@ -93,12 +93,13 @@ public class MainActivity extends Activity {
                 Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.fragment_main, container,
                     false);
-
             ListView listView = (ListView) rootView.findViewById(R.id.listView);
-            adapter = new StatusItemAdapter(rootView.getContext(),
-                    R.layout.status_item);
+            if(adapter==null){
+                adapter = new StatusItemAdapter(rootView.getContext(),
+                        R.layout.status_item);
+                initAdapter();
+            }
             listView.setAdapter(adapter);
-            notifyDBChange();
 
             /* listeners */
             Button newTweetButton = (Button) rootView
@@ -110,8 +111,8 @@ public class MainActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     getFragmentManager().beginTransaction()
-                            .replace(R.id.container, new NewRTFragment())
-                            .addToBackStack(null).commit();
+                            .add(R.id.container, new NewRTFragment())
+                            .commit();
 
                 }
 
@@ -142,7 +143,7 @@ public class MainActivity extends Activity {
             return rootView;
         }
 
-        public static void notifyDBChange() {
+        private void initAdapter(){
             if (adapter != null) {
                 adapter.clear();
                 DBAdapter dba = new DBAdapter(rootView.getContext()
@@ -168,6 +169,32 @@ public class MainActivity extends Activity {
                 dba.close();
                 updateListView();
             }
+        }
+        public static void addItemById(long id) {
+            if(adapter!=null){
+                DBAdapter dba = new DBAdapter(rootView.getContext()
+                        .getApplicationContext());
+                dba.open();
+                Cursor c = dba.getStatusById(id);
+                if (c.moveToFirst()) {
+                    do {
+                        long dbId = c.getLong(0);
+                        String type = c.getString(1);
+                        String content = c.getString(2);
+                        if (type.equals("TW")) {
+                            adapter.add(new TweetItem(dbId, rootView.getContext(),
+                                    content));
+                        } else if (type.equals("RT")) {
+                            long statusId = Long.valueOf(content);
+                            adapter.add(new RetweetItem(dbId, rootView.getContext(),
+                                    statusId));
+                        }
+                    } while (c.moveToNext());
+                }
+                c.close();
+                dba.close();
+            }
+            updateListView();
         }
 
         public static void updateListView() {
