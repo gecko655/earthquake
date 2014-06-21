@@ -106,6 +106,14 @@ public class MainActivity extends Activity {
                     .findViewById(R.id.newTweetButton);
             Button newRetweetButton = (Button) rootView
                     .findViewById(R.id.newRetweetButton);
+            Button reloadButton = (Button) rootView
+                    .findViewById(R.id.action_reload);
+            reloadButton.setOnClickListener(new OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    initAdapter();
+                }
+            });
             newRetweetButton.setOnClickListener(new OnClickListener() {
 
                 @Override

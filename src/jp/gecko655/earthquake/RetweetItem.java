@@ -46,8 +46,8 @@ public final class RetweetItem extends StatusItem {
                     content = status.getText();
                     MainActivity.PlaceholderFragment.updateListView();
                 } else {
-                    showToast("Something Wrong?:"
-                            + context.getClass().getName());
+                    content ="Tweet not found.";
+                    MainActivity.PlaceholderFragment.updateListView();
                 }
             }
         };
@@ -59,7 +59,7 @@ public final class RetweetItem extends StatusItem {
         if (status != null) {
             return "@" + status.getUser().getScreenName();
         }
-        return "Loading...";
+        return "";
     }
 
     @Override
@@ -67,7 +67,7 @@ public final class RetweetItem extends StatusItem {
         if (content != null) {
             return content;
         }
-        return "";
+        return "Loading...";
     }
 
     @Override
