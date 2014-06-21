@@ -69,6 +69,7 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
             @Override
             public void onClick(View v) {
                 try {
+                    showToast("Loading...");
                     String idString = newRTId.getText().toString();
                     long id = Long.valueOf(idString);
                     Bundle args = new Bundle();
@@ -109,7 +110,7 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    NewRTFragment.this.getFragmentManager().beginTransaction().remove(NewRTFragment.this).commit();
+                    NewRTFragment.this.getFragmentManager().popBackStack();
                 }
             });
         }
@@ -122,7 +123,7 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
     }
 
     private void showToast(String text) {
-        Toast.makeText(rootView.getContext(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(rootView.getContext(), text, Toast.LENGTH_LONG).show();
     }
 
 }

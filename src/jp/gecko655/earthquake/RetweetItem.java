@@ -57,7 +57,7 @@ public final class RetweetItem extends StatusItem {
         if (status != null) {
             return "@" + status.getUser().getScreenName();
         }
-        return "";
+        return "Loading...";
     }
 
     @Override
