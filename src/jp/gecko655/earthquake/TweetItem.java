@@ -11,12 +11,13 @@ import android.widget.Toast;
 
 public class TweetItem extends StatusItem {
 
-    String content;
+    private String content;
 
-    public TweetItem(Context context, String content) {
+    public TweetItem(long dbId, Context context, String content) {
+        this.dbId=dbId;
+        this.context = context;
         this.content = content;
         this.twitter = TwitterUtil.getTwitterInstance(context);
-        this.context = context;
     }
 
     @Override

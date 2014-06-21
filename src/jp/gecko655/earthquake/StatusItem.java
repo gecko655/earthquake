@@ -7,6 +7,7 @@ public abstract class StatusItem {
     String content;
     Twitter twitter;
     Context context;
+    long dbId;
 
     public abstract String getScreenName();
 

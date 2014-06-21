@@ -14,7 +14,8 @@ public final class RetweetItem extends StatusItem {
 
     Status status;
 
-    public RetweetItem(Context context, long statusId) {
+    public RetweetItem(long dbId, Context context, long statusId) {
+        this.dbId = dbId;
         this.twitter = TwitterUtil.getTwitterInstance(context);
         this.context = context;
         getStatus(statusId);

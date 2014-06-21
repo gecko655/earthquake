@@ -148,17 +148,18 @@ public class MainActivity extends Activity {
                 DBAdapter dba = new DBAdapter(rootView.getContext()
                         .getApplicationContext());
                 dba.open();
-                Cursor c = dba.getAllNotes();
+                Cursor c = dba.getAllStatuses();
                 if (c.moveToFirst()) {
                     do {
+                        long dbId = c.getLong(0);
                         String type = c.getString(1);
                         String content = c.getString(2);
                         if (type.equals("TW")) {
-                            adapter.add(new TweetItem(rootView.getContext(),
+                            adapter.add(new TweetItem(dbId, rootView.getContext(),
                                     content));
                         } else if (type.equals("RT")) {
                             long statusId = Long.valueOf(content);
-                            adapter.add(new RetweetItem(rootView.getContext(),
+                            adapter.add(new RetweetItem(dbId, rootView.getContext(),
                                     statusId));
                         }
                     } while (c.moveToNext());

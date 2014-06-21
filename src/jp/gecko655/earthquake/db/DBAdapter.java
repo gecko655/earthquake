@@ -41,25 +41,32 @@ public class DBAdapter {
     // App Methods
     //
 
-    public boolean deleteAllNotes() {
+    public boolean deleteAllStatuses() {
         return db.delete(StatusDatum.TABLE_NAME, null, null) > 0;
     }
 
-    public boolean deleteNote(int id) {
+    public boolean deleteStatus(int id) {
         return db.delete(StatusDatum.TABLE_NAME, Status._ID + "=" + id, null) > 0;
     }
 
-    public Cursor getAllNotes() {
+    public Cursor getAllStatuses() {
         Cursor c = null;
         c = db.query(StatusDatum.TABLE_NAME, null, null, null, null, null, null);
         return c;
     }
+    
+    public Cursor getStatusById(long statusId){
+        Cursor c = null;
+        String[] selectionArgs = {String.valueOf(statusId)};
+        c = db.query(StatusDatum.TABLE_NAME, null, "id = ?", selectionArgs, null, null, null);
+        return c;
+    }
 
-    public void saveNote(String kind, String content) {
+    public long saveNote(String kind, String content) {
         ContentValues values = new ContentValues();
         values.put(StatusDatum.COLUMN_KIND, kind);
         values.put(StatusDatum.COLUMN_CONTENT, content);
-        db.insertOrThrow(StatusDatum.TABLE_NAME, null, values);
+        return db.insertOrThrow(StatusDatum.TABLE_NAME, null, values);
     }
 
 }
