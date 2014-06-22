@@ -40,8 +40,7 @@ public class TweetItem extends StatusItem {
             protected List<String> doInBackground(Void... params) {
                 try {
                     // twitter.updateStatus(listView.getText().toString());
-                    twitter.updateStatus(getContent()
-                            + System.currentTimeMillis());
+                    twitter.updateStatus(getContent());
                     return Arrays.asList("OK");
                 } catch (TwitterException e) {
                     e.printStackTrace();
@@ -54,8 +53,7 @@ public class TweetItem extends StatusItem {
                 if (result != null) {
                     showToast(result.get(0));
                 } else {
-                    showToast("Something Wrong?:"
-                            + context.getClass().getName());
+                    showToast("Something Wrong?");
                 }
             }
         };

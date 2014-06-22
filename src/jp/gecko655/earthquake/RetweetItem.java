@@ -82,8 +82,7 @@ public final class RetweetItem extends StatusItem {
                     if (status.isRetweetedByMe()) {
                         twitter.destroyStatus(status.getCurrentUserRetweetId());
                     }
-                    twitter4j.Status rtStatus = twitter.retweetStatus(status
-                            .getId());
+                    twitter4j.Status rtStatus = twitter.retweetStatus(status.getId());
                     return Arrays.asList(rtStatus);
                 } catch (TwitterException e) {
                     e.printStackTrace();
@@ -98,8 +97,7 @@ public final class RetweetItem extends StatusItem {
                     showToast(rtStatus.getText() + " was Retweeted");
                     MainActivity.PlaceholderFragment.updateListView();
                 } else {
-                    showToast("Something Wrong?:"
-                            + context.getClass().getName());
+                    showToast("Something Wrong?");
                 }
             }
         };
