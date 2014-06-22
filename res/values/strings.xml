@@ -8,8 +8,6 @@
 
     <string name="action_auth">Re-authentication</string>
     <string name="action_reload">Re-load</string>
-    <string name="twitter_consumer_key">5c3ZBNzSGNhQ7BTOESQsEeJZt</string>
-    <string name="twitter_consumer_secret">FOt0cLiM7Q6VKacp7gNE9nmTTLRqeFbu2z05DAFz1xbf8AbHgx</string>
 
     <string name="oauth_button">OAuth</string>
     <string name="twitter_callback_url">earth://gecko655</string>
@@ -18,7 +16,8 @@
     <string name="newRetweetButton">Create New RT</string>
     
     <string name="newTweetHint">Input New Tweet</string>
-    <string name="newRetweetHint">Input Tweet Id to create new RT</string>
+    <string name="newRetweetHint">Input Tweet Id to create new RT\n
+         (Input 479847023424708608 if you want to retweet https://twitter.com/Fujimiya_Monday/status/479847023424708608)</string>
     <string name="register">Register</string>
     
 

@@ -41,29 +41,6 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
         twitter = TwitterUtil.getTwitterInstance(rootView.getContext());
         Button submit = (Button) rootView.findViewById(R.id.submitNewRetweet);
         newRTId = (EditText) rootView.findViewById(R.id.newRetweet);
-        newRTId.setText("479847023424708608");
-        newRTId.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                    int after) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                    int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
-
-            }
-
-        });
 
         submit.setOnClickListener(new OnClickListener() {
             @Override
