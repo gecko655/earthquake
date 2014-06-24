@@ -26,6 +26,7 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
     Twitter twitter;
     View rootView;
     EditText newRTId;
+    Button submit;
     final private String RT = "RT";
     private final int LOADER_ID = 0;
 
@@ -39,13 +40,14 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
         rootView = inflater.inflate(R.layout.fragment_new_retweet, container,
                 false);
         twitter = TwitterUtil.getTwitterInstance(rootView.getContext());
-        Button submit = (Button) rootView.findViewById(R.id.submitNewRetweet);
+        submit = (Button) rootView.findViewById(R.id.submitNewRetweet);
         newRTId = (EditText) rootView.findViewById(R.id.newRetweet);
 
         submit.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
+                	submit.setClickable(false);
                     showToast("Loading...");
                     String idString = newRTId.getText().toString();
                     long id = Long.valueOf(idString);
@@ -70,6 +72,7 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
 
     @Override
     public void onLoadFinished(Loader<Status> loader, Status data) {
+        submit.setClickable(true);
         if (data == null) {
             showToast("Invalid tweet id");
         } else {
