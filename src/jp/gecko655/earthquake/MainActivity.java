@@ -1,5 +1,9 @@
 package jp.gecko655.earthquake;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+
 import jp.gecko655.earthquake.db.DBAdapter;
 import jp.gecko655.earthquake.db.DatabaseOpenHelper;
 import twitter4j.Twitter;
@@ -33,12 +37,18 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         if (!TwitterUtil.hasAccessToken(this)) {
             getAccessToken();
             finish();
             return;
         }
         setContentView(R.layout.activity_main);
+
+        //Create admob
+        AdView adView = (AdView)findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
