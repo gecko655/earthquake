@@ -2,6 +2,7 @@ package jp.gecko655.earthquake;
 
 import jp.gecko655.earthquake.db.DBAdapter;
 import jp.gecko655.earthquake.db.DatabaseOpenHelper;
+import jp.gecko655.earthquake.realtime.Yurekuru;
 import twitter4j.Twitter;
 import android.app.Activity;
 import android.app.Fragment;
@@ -25,6 +26,7 @@ import android.os.Build;
 
 public class MainActivity extends Activity {
     final static String TAG = "EARTH_MAIN";
+    private Yurekuru yurekuru;
 
     public MainActivity() {
     }
@@ -39,6 +41,8 @@ public class MainActivity extends Activity {
             return;
         }
         setContentView(R.layout.activity_main);
+
+        yurekuru = new Yurekuru(this);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -76,6 +80,11 @@ public class MainActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	yurekuru.disConnect();
     }
 
     /**
