@@ -37,6 +37,7 @@
                     android:scheme="earth" />
             </intent-filter>
         </activity>
+        <service android:name="jp.gecko655.earthquake.realtime.Yurekuru"></service>    
     </application>
 
 </manifest>

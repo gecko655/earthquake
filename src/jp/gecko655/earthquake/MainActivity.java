@@ -26,8 +26,7 @@ import android.os.Build;
 
 public class MainActivity extends Activity {
     final static String TAG = "EARTH_MAIN";
-    private boolean running=false;
-    private Yurekuru yurekuru;
+    private static boolean running=false;
 
     public MainActivity() {
     }
@@ -44,8 +43,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
 
+        startService(new Intent(this,Yurekuru.class));
         if (savedInstanceState == null) {
-            yurekuru = new Yurekuru(this);
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment()).commit();
             /* Database Initialize */
@@ -99,9 +98,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
     	super.onDestroy();
-    	if(yurekuru!=null){
-            yurekuru.disConnect();
-        }
     }
 
     /**
@@ -255,7 +251,7 @@ public class MainActivity extends Activity {
 
     }
 
-	public boolean isRunning() {
+	public static boolean isRunning() {
 		return running;
 	}
 
