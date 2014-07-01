@@ -81,6 +81,7 @@ public class Yurekuru extends Service{
 		final String TAG = "YurekuruAdapter";
 		final String LATITUDE ="緯度";
 		final String LONGITUDE ="経度";
+		final String MAGNITUDE ="マグニチュード";
 		
 
 		/**
@@ -91,17 +92,34 @@ public class Yurekuru extends Service{
 			String text = status.getText();
 			double lat=getLat(text);
 			double lng=getLng(text);
-			if(lat<0||lng<0){
+			double magnitude =getMagnitude(text);
+			if(lat<0||lng<0||magnitude<0){
 				return;
 			}
 			double distance = calcDistance(lat,lng);
 			Log.d(TAG,"distance="+distance);
-			if(distance<100*1000.0){//distance is less than 100 km
+			Log.d(TAG,"magnitude="+magnitude);
+			if(isFeltEarthquake(distance,magnitude)){
 				doNotify(text);
 	            showToast("Earthquake happens near here!");
 			}
 		}
 
+
+		/**
+		 * Calculate whether the earthquake is felt earthquake or not.
+		 * "Ichikawa's maximum distance formula" is used. 
+		 * @see <a href="http://www.jma.go.jp/jma/kishou/books/kenshin/vol25p083.pdf">http://www.jma.go.jp/jma/kishou/books/kenshin/vol25p083.pdf</a>
+		 * @param distance
+		 * @param magnitude
+		 * @return
+		 */
+		private boolean isFeltEarthquake(double distance, double magnitude) {
+			//Ichikawa's original formula is (magnitude=2.7*Math.log(distance/1000)-1.0) 
+			//with the accuracy of M+-0.5.
+			//To raise recall (not precision), magnitude is added by 0.5.
+			return ((magnitude+0.5)>(2.7*Math.log10(distance/1000)-1.0));
+		}
 
 		private void doNotify(String text) {
             Intent intent = new Intent(getBaseContext(),MainActivity.class);;
@@ -126,11 +144,19 @@ public class Yurekuru extends Service{
 			Toast.makeText(Yurekuru.this, msg, Toast.LENGTH_SHORT).show();
 		}
 
+		/**
+		 * 
+		 * @param tweet
+		 * @return magnitude or -1.0 if matcher failed
+		 */
+		private double getMagnitude(String tweet) {
+			return getValue(MAGNITUDE,tweet);
+		}
 
 		/**
 		 * 
 		 * @param tweet
-		 * @return latitude of -1.0 if matcher failed
+		 * @return latitude or -1.0 if matcher failed
 		 */
 		public double getLat(String tweet){
 			return getValue(LATITUDE,tweet);
@@ -138,7 +164,7 @@ public class Yurekuru extends Service{
 		/**
 		 * 
 		 * @param tweet
-		 * @return longitude of -1.0 if matcher failed
+		 * @return longitude or -1.0 if matcher failed
 		 */
 		public double getLng(String tweet){
 			return getValue(LONGITUDE,tweet);
