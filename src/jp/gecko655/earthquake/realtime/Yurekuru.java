@@ -56,6 +56,12 @@ public class Yurekuru extends Service{
         };
         task.execute();
 	}
+	
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		disConnect();
+	}
 
 
 	public void disConnect() {
