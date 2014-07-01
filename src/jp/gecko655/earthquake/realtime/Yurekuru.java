@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jp.gecko655.earthquake.MainActivity;
+import jp.gecko655.earthquake.R;
 import jp.gecko655.earthquake.TwitterUtil;
 import twitter4j.FilterQuery;
 import twitter4j.ResponseList;
@@ -13,11 +14,17 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterStream;
 import twitter4j.User;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -76,24 +83,41 @@ public class Yurekuru extends Service{
 		final String LONGITUDE ="経度";
 		
 
-		@Override
+		/**
+		 * @Override
+		 * Parsing @yurekuru's tweet and compute whether the earthquake can be realized by the user or not.
+		 */
 		public void onStatus(Status status){
-			double lat=getLat(status.getText());
-			double lng=getLng(status.getText());
+			String text = status.getText();
+			double lat=getLat(text);
+			double lng=getLng(text);
 			if(lat<0||lng<0){
 				return;
 			}
 			double distance = calcDistance(lat,lng);
 			Log.d(TAG,"distance="+distance);
 			if(distance<100*1000.0){//distance is less than 100 km
-				if(!MainActivity.isRunning()){
-	                Intent intent = new Intent(getBaseContext(),MainActivity.class);;
-	                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	                getApplication().startActivity(intent);
-				}else{
-				}
+				doNotify(text);
 	            showToast("Earthquake happens near here!");
 			}
+		}
+
+
+		private void doNotify(String text) {
+            Intent intent = new Intent(getBaseContext(),MainActivity.class);;
+            PendingIntent pi = PendingIntent.getActivity(Yurekuru.this, 0, intent, 0);
+            Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+            Notification.Builder builder = new Notification.Builder(getApplicationContext());
+            builder.setContentIntent(pi);
+            builder.setTicker("Earthquake happense near here!!");
+            builder.setLargeIcon(icon);
+            builder.setSmallIcon(R.drawable.ic_launcher);
+            builder.setContentTitle("Earthquake");
+            builder.setContentText("Earthquake happens near here!!");
+            builder.setWhen(System.currentTimeMillis());
+            builder.setDefaults(Notification.DEFAULT_ALL);
+            NotificationManager manager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
+            manager.notify(0,builder.build());
 		}
 
 
@@ -109,7 +133,7 @@ public class Yurekuru extends Service{
 		 * @return latitude of -1.0 if matcher failed
 		 */
 		public double getLat(String tweet){
-			return getLatLng(LATITUDE,tweet);
+			return getValue(LATITUDE,tweet);
 		}
 		/**
 		 * 
@@ -117,11 +141,11 @@ public class Yurekuru extends Service{
 		 * @return longitude of -1.0 if matcher failed
 		 */
 		public double getLng(String tweet){
-			return getLatLng(LONGITUDE,tweet);
+			return getValue(LONGITUDE,tweet);
 		}
 
-		private double getLatLng(String axisName, String tweet) {
-	        Pattern pattern = Pattern.compile(axisName + "：([0-9.]*)");
+		private double getValue(String param, String tweet) {
+	        Pattern pattern = Pattern.compile(param + "：([0-9.]*)");
 	        Matcher matcher=pattern.matcher(tweet);
 	        if(matcher.find()){
 	            return Double.parseDouble(matcher.group(1));
