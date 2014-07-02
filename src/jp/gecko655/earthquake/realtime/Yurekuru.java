@@ -87,6 +87,7 @@ public class Yurekuru extends Service{
 		final String LATITUDE ="緯度";
 		final String LONGITUDE ="経度";
 		final String MAGNITUDE ="マグニチュード";
+        final String SEQ = "SEQ";
 		
 
 		/**
@@ -103,27 +104,13 @@ public class Yurekuru extends Service{
 			}
 			Log.d(TAG,"distance="+distance);
 			Log.d(TAG,"magnitude="+magnitude);
-			if(isFeltEarthquake(distance,magnitude)){
+			if(isFirstSeq(text)&&isFeltEarthquake(distance,magnitude)){
 				doNotify(text);
 	            showToast("Earthquake happens near here!");
 			}
 		}
 
 
-		/**
-		 * Calculate whether the earthquake is felt earthquake or not.
-		 * "Ichikawa's maximum distance formula" is used. 
-		 * @see <a href="http://www.jma.go.jp/jma/kishou/books/kenshin/vol25p083.pdf">http://www.jma.go.jp/jma/kishou/books/kenshin/vol25p083.pdf</a>
-		 * @param distance
-		 * @param magnitude
-		 * @return
-		 */
-		private boolean isFeltEarthquake(double distance, double magnitude) {
-			//Ichikawa's original formula is (magnitude=2.7*Math.log(distance/1000)-1.0) 
-			//with the accuracy of M+-0.5.
-			//To raise recall (not precision), magnitude is added by 0.5.
-			return ((magnitude+0.5)>(2.7*Math.log10(distance/1000)-1.0));
-		}
 
 		private void doNotify(String text) {
             Intent intent = new Intent(getBaseContext(),MainActivity.class);;
@@ -153,6 +140,21 @@ public class Yurekuru extends Service{
 		}
 
 		/**
+		 * Calculate whether the earthquake is felt earthquake or not.
+		 * "Ichikawa's maximum distance formula" is used. 
+		 * @see <a href="http://www.jma.go.jp/jma/kishou/books/kenshin/vol25p083.pdf">http://www.jma.go.jp/jma/kishou/books/kenshin/vol25p083.pdf</a>
+		 * @param distance
+		 * @param magnitude
+		 * @return
+		 */
+		private boolean isFeltEarthquake(double distance, double magnitude) {
+			//Ichikawa's original formula is (magnitude=2.7*Math.log(distance/1000)-1.0) 
+			//with the accuracy of M+-0.5.
+			//To raise recall (not precision), magnitude is added by 0.5.
+			return ((magnitude+0.5)>(2.7*Math.log10(distance/1000)-1.0));
+		}
+
+		/**
 		 * 
 		 * @param tweet
 		 * @return magnitude or -1.0 if matcher failed
@@ -166,7 +168,7 @@ public class Yurekuru extends Service{
 		 * @param tweet
 		 * @return latitude or -1.0 if matcher failed
 		 */
-		public double getLat(String tweet){
+		private double getLat(String tweet){
 			return getValue(LATITUDE,tweet);
 		}
 		/**
@@ -174,15 +176,22 @@ public class Yurekuru extends Service{
 		 * @param tweet
 		 * @return longitude or -1.0 if matcher failed
 		 */
-		public double getLng(String tweet){
+		private double getLng(String tweet){
 			return getValue(LONGITUDE,tweet);
+		}
+		private boolean isFirstSeq(String tweet){
+			return (getValue(SEQ,tweet)==1.0);
 		}
 
 		private double getValue(String param, String tweet) {
 	        Pattern pattern = Pattern.compile(param + "：([0-9.]*)");
 	        Matcher matcher=pattern.matcher(tweet);
 	        if(matcher.find()){
-	            return Double.parseDouble(matcher.group(1));
+	        	try{
+                    return Double.parseDouble(matcher.group(1));
+	        	}catch(NumberFormatException e){
+	        		return -1.0;
+	        	}
 	        }
 	        return -1.0;
 
