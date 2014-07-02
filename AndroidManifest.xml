@@ -7,7 +7,8 @@
     <uses-sdk
         android:minSdkVersion="17"
         android:targetSdkVersion="19" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -23,7 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity 
+        <activity
             android:name="jp.gecko655.earthquake.TwitterOauthActivity"
             android:launchMode="singleTask" >
             <intent-filter>
@@ -37,8 +38,15 @@
                     android:scheme="earth" />
             </intent-filter>
         </activity>
-        <service android:name="jp.gecko655.earthquake.realtime.Yurekuru"></service>    
+
+        <service android:name="jp.gecko655.earthquake.realtime.Yurekuru" >
+        </service>
+
+        <activity
+            android:name="jp.gecko655.earthquake.realtime.CallDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:launchMode="singleInstance">
+        </activity>
     </application>
 
 </manifest>
-

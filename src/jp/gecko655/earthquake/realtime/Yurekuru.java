@@ -14,11 +14,13 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterStream;
 import twitter4j.User;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -138,6 +140,10 @@ public class Yurekuru extends Service{
             builder.setDefaults(Notification.DEFAULT_ALL);
             NotificationManager manager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
             manager.notify(0,builder.build());
+
+            Intent i = new Intent(Yurekuru.this,CallDialogActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            Yurekuru.this.startActivity(i); 
 		}
 
 
