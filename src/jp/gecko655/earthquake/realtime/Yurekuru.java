@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 public class Yurekuru extends Service{
 	final String TAG = "Yurekuru";
+	final String yurekuruUserName = "gecko535";
 	TwitterStream twitterStream;
 
 	@Override
@@ -48,13 +49,14 @@ public class Yurekuru extends Service{
 			protected String doInBackground(Void... params) {
                 try {
                     ResponseList<User> users;
-                    users = twitter.searchUsers("gecko535", 1);
+                    users = twitter.searchUsers(yurekuruUserName, 1);
                     FilterQuery filter = new FilterQuery();
                     long[] userIds = {users.get(0).getId()};
                     Log.d(TAG,""+userIds[0]);
                     filter.follow(userIds);
                     twitterStream.filter(filter);
                 } catch (TwitterException e) {
+                	Log.d(TAG,e.getMessage());
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
@@ -67,6 +69,7 @@ public class Yurekuru extends Service{
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
+		Log.d(TAG,"onDestroy");
 		disConnect();
 	}
 
@@ -89,14 +92,13 @@ public class Yurekuru extends Service{
 		 * Parsing @yurekuru's tweet and compute whether the earthquake can be realized by the user or not.
 		 */
 		public void onStatus(Status status){
+			Log.d(TAG,"Tweeted");
 			String text = status.getText();
-			double lat=getLat(text);
-			double lng=getLng(text);
 			double magnitude =getMagnitude(text);
-			if(lat<0||lng<0||magnitude<0){
+			double distance = calcDistance(text);
+			if(distance<0||magnitude<0){
 				return;
 			}
-			double distance = calcDistance(lat,lng);
 			Log.d(TAG,"distance="+distance);
 			Log.d(TAG,"magnitude="+magnitude);
 			if(isFeltEarthquake(distance,magnitude)){
@@ -127,7 +129,7 @@ public class Yurekuru extends Service{
             Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
             Notification.Builder builder = new Notification.Builder(getApplicationContext());
             builder.setContentIntent(pi);
-            builder.setTicker("Earthquake happense near here!!");
+            builder.setTicker("Earthquake happens near here!!");
             builder.setLargeIcon(icon);
             builder.setSmallIcon(R.drawable.ic_launcher);
             builder.setContentTitle("Earthquake");
@@ -180,7 +182,12 @@ public class Yurekuru extends Service{
 
 		}
 
-		private double calcDistance(double lat, double lng) {
+		private double calcDistance(String tweet) {
+			double lat = getLat(tweet);
+			double lng = getLng(tweet);
+			if(lat<0||lng<0){
+				return -1.0;
+			}
 	        double degToRad = Math.PI/180.0;
 	        double latRad1 = lat*degToRad;
 	        double lngRad1 = lng*degToRad;

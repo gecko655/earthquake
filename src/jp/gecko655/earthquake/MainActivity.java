@@ -26,7 +26,6 @@ import android.os.Build;
 
 public class MainActivity extends Activity {
     final static String TAG = "EARTH_MAIN";
-    private static boolean running=false;
 
     public MainActivity() {
     }
@@ -34,6 +33,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG,"onCreate");
 
         if (!TwitterUtil.hasAccessToken(this)) {
             getAccessToken();
@@ -85,14 +85,12 @@ public class MainActivity extends Activity {
     protected void onResume(){
     	super.onResume();
     	Log.d(TAG,"redume");
-    	running = true;
     }
 
     @Override
     protected void onPause(){
     	super.onPause();
     	Log.d(TAG,"pause");
-    	running = false;
     }
 
     @Override
@@ -250,9 +248,5 @@ public class MainActivity extends Activity {
         }
 
     }
-
-	public static boolean isRunning() {
-		return running;
-	}
 
 }
