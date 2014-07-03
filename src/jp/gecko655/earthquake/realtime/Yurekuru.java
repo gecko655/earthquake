@@ -18,9 +18,14 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
@@ -28,7 +33,7 @@ import android.widget.Toast;
 
 public class Yurekuru extends Service{
 	final String TAG = "Yurekuru";
-	final String yurekuruUserName = "yurekuru";
+	final String yurekuruUserName = "gecko535";
 	TwitterStream twitterStream;
 
 	@Override
@@ -194,16 +199,20 @@ public class Yurekuru extends Service{
 		}
 
 		private double calcDistance(String tweet) {
-			double lat = getLat(tweet);
-			double lng = getLng(tweet);
-			if(lat<0||lng<0){
+			double lat1 = getLat(tweet);
+			double lng1 = getLng(tweet);
+			Location location = getMyLocation();
+            double lat2 = location.getLatitude();
+            double lng2 = location.getLongitude();
+            Log.d(TAG,"Current location > lat: "+lat2+ " lng "+lng2);
+			if(lat1<0||lng1<0){
 				return -1.0;
 			}
 	        double degToRad = Math.PI/180.0;
-	        double latRad1 = lat*degToRad;
-	        double lngRad1 = lng*degToRad;
-	        double latRad2 = 35.6*degToRad;
-	        double lngRad2 = 139.4*degToRad;
+	        double latRad1 = lat1*degToRad;
+	        double lngRad1 = lng1*degToRad;
+	        double latRad2 = lat2*degToRad;
+	        double lngRad2 = lng2*degToRad;
 	        
 	        double latAve = (latRad1+latRad2)/2;
 	        double latDiff = (latRad1-latRad2);
@@ -220,6 +229,21 @@ public class Yurekuru extends Service{
 	        double y = primevertical * Math.cos(latAve) * lngDiff;
 
 	        return Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
+		}
+
+
+
+		private Location getMyLocation() {
+            LocationManager lm = (LocationManager) Yurekuru.this.getSystemService(Context.LOCATION_SERVICE);
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location == null)
+                location = lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+            if(location==null){
+            	Log.d(TAG,"location is null");
+            }
+            Log.d(TAG,location.toString());
+            return location;
+			
 		}
 		
 	}

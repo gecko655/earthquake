@@ -12,8 +12,8 @@
     <string name="newTweetButton">Create New Tweet</string>
     <string name="newRetweetButton">Create New RT</string>
     <string name="newTweetHint">Input New Tweet</string>
-    <string name="newRetweetHint">Input Tweet Id to create new RT\n
-         (Input 479847023424708608 if you want to retweet https://twitter.com/Fujimiya_Monday/status/479847023424708608)</string>
+    <string name="newRetweetHint">Input Tweet URL to create new RT\n
+         (example : https://twitter.com/Fujimiya_Monday/status/479847023424708608)</string>
     <string name="register">Register</string>
     <string name="title_activity_call_dialog">CallDialogActivity</string>
 
