@@ -6,7 +6,7 @@ import com.google.android.gms.ads.AdView;
 
 import jp.gecko655.earthquake.db.DBAdapter;
 import jp.gecko655.earthquake.db.DatabaseOpenHelper;
-import twitter4j.Twitter;
+import jp.gecko655.earthquake.realtime.Yurekuru;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -25,7 +25,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.os.Build;
 
 public class MainActivity extends Activity {
     final static String TAG = "EARTH_MAIN";
@@ -36,6 +35,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG,"onCreate");
 
 
         if (!TwitterUtil.hasAccessToken(this)) {
@@ -50,6 +50,7 @@ public class MainActivity extends Activity {
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
 
+        startService(new Intent(this,Yurekuru.class));
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment()).commit();
@@ -86,6 +87,22 @@ public class MainActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    protected void onResume(){
+    	super.onResume();
+    	Log.d(TAG,"redume");
+    }
+
+    @Override
+    protected void onPause(){
+    	super.onPause();
+    	Log.d(TAG,"pause");
+    }
+
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
     }
 
     /**

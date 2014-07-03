@@ -2,6 +2,8 @@ package jp.gecko655.earthquake;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
+import twitter4j.TwitterStream;
+import twitter4j.TwitterStreamFactory;
 import twitter4j.auth.AccessToken;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -32,6 +34,27 @@ public class TwitterUtil {
             twitter.setOAuthAccessToken(loadAccessToken(context));
         }
         return twitter;
+    }
+
+    /**
+     * Twitterインスタンスを取得します。アクセストークンが保存されていれば自動的にセットします。
+     * 
+     * @param context
+     * @return
+     */
+    public static TwitterStream getTwitterStreamInstance(Context context) {
+        String consumerKey = context.getString(R.string.twitter_consumer_key);
+        String consumerSecret = context
+                .getString(R.string.twitter_consumer_secret);
+
+        TwitterStreamFactory factory = new TwitterStreamFactory();
+        TwitterStream twitterStream = factory.getInstance();
+        twitterStream.setOAuthConsumer(consumerKey, consumerSecret);
+
+        if (hasAccessToken(context)) {
+            twitterStream.setOAuthAccessToken(loadAccessToken(context));
+        }
+        return twitterStream;
     }
 
     /**

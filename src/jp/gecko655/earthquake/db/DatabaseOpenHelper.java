@@ -1,7 +1,6 @@
 package jp.gecko655.earthquake.db;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
@@ -47,8 +46,6 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
-        Cursor c = db.query(StatusDatum.TABLE_NAME, null, null, null, null,
-                null, null);
     }
 
     @Override

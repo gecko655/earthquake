@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 public class StatusItemAdapter extends ArrayAdapter<StatusItem> {
 
-    private Context context;
     private int textViewResourceId;
     private Map<Long,StatusItem> items;
     private LayoutInflater inflater;
@@ -26,7 +25,6 @@ public class StatusItemAdapter extends ArrayAdapter<StatusItem> {
     public StatusItemAdapter(Context context, int resource,
             LinkedHashMap<Long,StatusItem> items) {
         super(context, resource);
-        this.context = context;
         this.textViewResourceId = resource;
         this.items = items;
         this.inflater = (LayoutInflater) context
