@@ -5,20 +5,16 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="action_settings">Settings</string>
-
     <string name="action_auth">Re-authentication</string>
     <string name="action_reload">Re-load</string>
-
     <string name="oauth_button">OAuth</string>
     <string name="twitter_callback_url">earth://gecko655</string>
-    
     <string name="newTweetButton">Create New Tweet</string>
     <string name="newRetweetButton">Create New RT</string>
-    
     <string name="newTweetHint">Input New Tweet</string>
     <string name="newRetweetHint">Input Tweet Id to create new RT\n
          (Input 479847023424708608 if you want to retweet https://twitter.com/Fujimiya_Monday/status/479847023424708608)</string>
     <string name="register">Register</string>
-    
+    <string name="title_activity_call_dialog">CallDialogActivity</string>
 
 </resources>

@@ -3,12 +3,11 @@ package jp.gecko655.earthquake;
 import java.util.Arrays;
 import java.util.List;
 
+import twitter4j.Status;
+import twitter4j.TwitterException;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
-import twitter4j.TwitterException;
-import twitter4j.Status;
 
 public final class RetweetItem extends StatusItem {
 

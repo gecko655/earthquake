@@ -12,8 +12,6 @@ public class DBAdapter {
     private DatabaseOpenHelper dbHelper;
     private SQLiteDatabase db;
 
-    private String[][] datas = new String[][] { { "TW", "おなかすいた" },
-            { "RT", "475968127730057216" } };
 
     /**
      * DBAdapter should call {@link DBAdapter#open() open()} before and
