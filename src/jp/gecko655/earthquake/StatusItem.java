@@ -1,7 +1,7 @@
 package jp.gecko655.earthquake;
 
-import android.content.Context;
 import twitter4j.Twitter;
+import android.content.Context;
 
 public abstract class StatusItem {
     String content;

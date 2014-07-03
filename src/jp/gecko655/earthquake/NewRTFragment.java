@@ -3,22 +3,17 @@ package jp.gecko655.earthquake;
 import jp.gecko655.earthquake.db.DBAdapter;
 import twitter4j.Status;
 import twitter4j.Twitter;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {

@@ -3,7 +3,6 @@ package jp.gecko655.earthquake;
 import jp.gecko655.earthquake.db.DBAdapter;
 import jp.gecko655.earthquake.db.DatabaseOpenHelper;
 import jp.gecko655.earthquake.realtime.Yurekuru;
-import twitter4j.Twitter;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -22,7 +21,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.os.Build;
 
 public class MainActivity extends Activity {
     final static String TAG = "EARTH_MAIN";

@@ -3,7 +3,6 @@ package jp.gecko655.earthquake;
 import java.util.Arrays;
 import java.util.List;
 
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import android.content.Context;
 import android.os.AsyncTask;
