@@ -59,7 +59,11 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
             }
 
 			private long getStatusId(String idString) {
-            	Pattern pattern =Pattern.compile("https://twitter.com/[^/]*/status/(\\d{2,20})");
+				/* This pattern will match...
+				 * https://twitter.com/gecko655/status/1234567890123456/
+				 * https://twitter.com/gecko655/statuses/1234567890123456/
+				 */
+            	Pattern pattern =Pattern.compile("https://twitter.com/[^/]+/status[^/]*/(\\d{2,20})");
 				try{
 					return Long.valueOf(idString);
 				}catch(NumberFormatException e){
