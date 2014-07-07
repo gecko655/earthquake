@@ -1,5 +1,8 @@
 package jp.gecko655.earthquake;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import jp.gecko655.earthquake.db.DBAdapter;
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -41,19 +44,36 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
         submit.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                	submit.setClickable(false);
-                    showToast("Loading...");
-                    String idString = newRTId.getText().toString();
-                    long id = Long.valueOf(idString);
-                    Bundle args = new Bundle();
-                    args.putLong("statusId", id);
-                    getLoaderManager().initLoader(LOADER_ID, args,
-                            NewRTFragment.this).forceLoad();
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
+                submit.setClickable(false);
+                String idString = newRTId.getText().toString();
+                long id = getStatusId(idString);
+                if(id < 0){
+                    showToast("Invalid tweet id or tweet URL");
+                    return;
                 }
+                showToast("Loading...");
+                Bundle args = new Bundle();
+                args.putLong("statusId", id);
+                getLoaderManager().initLoader(LOADER_ID, args,
+                        NewRTFragment.this).forceLoad();
             }
+
+			private long getStatusId(String idString) {
+				/* This pattern will match...
+				 * https://twitter.com/gecko655/status/1234567890123456/
+				 * https://twitter.com/gecko655/statuses/1234567890123456/
+				 */
+            	Pattern pattern =Pattern.compile("https://twitter.com/[^/]+/status[^/]*/(\\d{2,20})");
+				try{
+					return Long.valueOf(idString);
+				}catch(NumberFormatException e){
+				}
+				Matcher matcher = pattern.matcher(idString);
+				if(matcher.find()){
+					return Long.valueOf(matcher.group(1));
+				}
+				return -1;
+			}
         });
 
         return rootView;
