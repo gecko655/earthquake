@@ -33,7 +33,7 @@ import android.widget.Toast;
 
 public class Yurekuru extends Service{
 	final String TAG = "Yurekuru";
-	final String yurekuruUserName = "gecko535";
+	final String yurekuruUserName = "Yurekuru";
 	TwitterStream twitterStream;
 
 	@Override
