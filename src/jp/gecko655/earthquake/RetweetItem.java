@@ -7,6 +7,7 @@ import twitter4j.Status;
 import twitter4j.TwitterException;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 public final class RetweetItem extends StatusItem {
@@ -97,6 +98,7 @@ public final class RetweetItem extends StatusItem {
                     MainActivity.PlaceholderFragment.updateListView();
                 } else {
                     showToast("Something Wrong?");
+                    Log.w("retweetitem","Something Wrong?");
                 }
             }
         };

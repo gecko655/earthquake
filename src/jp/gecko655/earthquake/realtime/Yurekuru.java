@@ -204,7 +204,7 @@ public class Yurekuru extends Service{
 			Location location = getMyLocation();
             double lat2 = location.getLatitude();
             double lng2 = location.getLongitude();
-            Log.d(TAG,"Current location > lat: "+lat2+ " lng "+lng2);
+            Log.d(TAG,"Current location : lat: "+lat2+ " lng "+lng2);
 			if(lat1<0||lng1<0){
 				return -1.0;
 			}
@@ -241,7 +241,6 @@ public class Yurekuru extends Service{
             if(location==null){
             	Log.d(TAG,"location is null");
             }
-            Log.d(TAG,location.toString());
             return location;
 			
 		}
