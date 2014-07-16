@@ -64,7 +64,9 @@ public class NewTweetFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String submittedText = newTweet.getText().toString();
-                if (!submittedText.isEmpty()) {
+                if (submittedText.isEmpty()) {
+                	showToast("Please input the new tweet.");
+                }else{
                     DBAdapter dba = new DBAdapter(rootView.getContext()
                             .getApplicationContext());
                     dba.open();

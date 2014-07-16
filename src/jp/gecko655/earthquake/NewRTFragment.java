@@ -45,17 +45,21 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
             @Override
             public void onClick(View v) {
                 submit.setClickable(false);
-                String idString = newRTId.getText().toString();
-                long id = getStatusId(idString);
-                if(id < 0){
-                    showToast("Invalid tweet id or tweet URL");
-                    return;
+                try{
+                    String idString = newRTId.getText().toString();
+                    long id = getStatusId(idString);
+                    if(id < 0){
+                        showToast("Invalid tweet id or tweet URL");
+                        return;
+                    }
+                    showToast("Loading...");
+                    Bundle args = new Bundle();
+                    args.putLong("statusId", id);
+                    getLoaderManager().initLoader(LOADER_ID, args,
+                            NewRTFragment.this).forceLoad();
+                }finally{
+                	submit.setClickable(true);
                 }
-                showToast("Loading...");
-                Bundle args = new Bundle();
-                args.putLong("statusId", id);
-                getLoaderManager().initLoader(LOADER_ID, args,
-                        NewRTFragment.this).forceLoad();
             }
 
 			private long getStatusId(String idString) {
@@ -63,7 +67,7 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
 				 * https://twitter.com/gecko655/status/1234567890123456/
 				 * https://twitter.com/gecko655/statuses/1234567890123456/
 				 */
-            	Pattern pattern =Pattern.compile("https://twitter.com/[^/]+/status[^/]*/(\\d{2,20})");
+            	Pattern pattern =Pattern.compile("twitter.com/[^/]+/status[^/]*/(\\d{2,20})");
 				try{
 					return Long.valueOf(idString);
 				}catch(NumberFormatException e){
