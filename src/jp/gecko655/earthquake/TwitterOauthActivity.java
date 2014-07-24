@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -54,6 +55,7 @@ public class TwitterOauthActivity extends Activity {
             @Override
             protected String doInBackground(Void... params) {
                 try {
+                	mTwitter.setOAuthAccessToken(null);
                     mRequestToken = mTwitter.getOAuthRequestToken(mCallbackURL);
                     return mRequestToken.getAuthorizationURL();
                 } catch (TwitterException e) {
@@ -90,6 +92,7 @@ public class TwitterOauthActivity extends Activity {
             @Override
             protected AccessToken doInBackground(String... params) {
                 try {
+                	Log.d("HEREEE",params[0]);
                     return mTwitter.getOAuthAccessToken(mRequestToken,
                             params[0]);
                 } catch (TwitterException e) {

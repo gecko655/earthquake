@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
         Log.d(TAG,"onCreate");
 
         if (!TwitterUtil.hasAccessToken(this)) {
-            getAccessToken();
+            startOauthActivity();
             finish();
             return;
         }
@@ -53,8 +53,11 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void getAccessToken() {
+    private void startOauthActivity() {
         TwitterUtil.deleteAccessToken(this);
+        //Stop yurekuru
+        this.stopService(new Intent(this, Yurekuru.class));
+        //Start TwitterOauthActivity
         Intent intent = new Intent(this, TwitterOauthActivity.class);
         startActivity(intent);
         finish();
@@ -74,7 +77,7 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_auth) {
-            getAccessToken();
+            startOauthActivity();
             return true;
         }
         return super.onOptionsItemSelected(item);
