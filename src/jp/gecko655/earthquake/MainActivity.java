@@ -84,19 +84,19 @@ public class MainActivity extends Activity {
     }
     @Override
     protected void onResume(){
-    	super.onResume();
-    	Log.d(TAG,"redume");
+        super.onResume();
+        Log.d(TAG,"redume");
     }
 
     @Override
     protected void onPause(){
-    	super.onPause();
-    	Log.d(TAG,"pause");
+        super.onPause();
+        Log.d(TAG,"pause");
     }
 
     @Override
     protected void onDestroy() {
-    	super.onDestroy();
+        super.onDestroy();
     }
 
     /**

@@ -58,26 +58,26 @@ public class NewRTFragment extends Fragment implements LoaderCallbacks<Status> {
                     getLoaderManager().initLoader(LOADER_ID, args,
                             NewRTFragment.this).forceLoad();
                 }finally{
-                	submit.setClickable(true);
+                    submit.setClickable(true);
                 }
             }
 
-			private long getStatusId(String idString) {
-				/* This pattern will match...
-				 * https://twitter.com/gecko655/status/1234567890123456/
-				 * https://twitter.com/gecko655/statuses/1234567890123456/
-				 */
-            	Pattern pattern =Pattern.compile("twitter.com/[^/]+/status[^/]*/(\\d{2,20})");
-				try{
-					return Long.valueOf(idString);
-				}catch(NumberFormatException e){
-				}
-				Matcher matcher = pattern.matcher(idString);
-				if(matcher.find()){
-					return Long.valueOf(matcher.group(1));
-				}
-				return -1;
-			}
+            private long getStatusId(String idString) {
+                /* This pattern will match...
+                 * https://twitter.com/gecko655/status/1234567890123456/
+                 * https://twitter.com/gecko655/statuses/1234567890123456/
+                 */
+                Pattern pattern =Pattern.compile("twitter.com/[^/]+/status[^/]*/(\\d{2,20})");
+                try{
+                    return Long.valueOf(idString);
+                }catch(NumberFormatException e){
+                }
+                Matcher matcher = pattern.matcher(idString);
+                if(matcher.find()){
+                    return Long.valueOf(matcher.group(1));
+                }
+                return -1;
+            }
         });
 
         return rootView;
