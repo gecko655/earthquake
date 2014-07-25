@@ -5,7 +5,7 @@
 
 - このアプリケーションは、東京工業大学IT特別研究コースの「ソフトウェア開発演習」の授業で作成したものです。
  - 授業のリポジトリ: https://github.com/itspsdl
- - 7/25成果物発表会発表スライド: http://www.slideshare.net/gecko655/sdl-37343147
+ - 7/25成果物発表会発表スライド: http://www.slideshare.net/gecko655/sdl-lt
 
 ### 機能
 
