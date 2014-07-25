@@ -1,4 +1,5 @@
-# 地震Twitter
+地震Twitter
+===========
 
 地震が起こった時に過去の地震関係のツイートを素早くリツイートするためのAndroidアプリケーションです。
 
@@ -19,6 +20,7 @@
 
 
 
-##### Google play storeで公開中です。
+##### Google play storeで公開中
+
 https://play.google.com/store/apps/details?id=jp.gecko655.earthquake  
 Android 4.2以上対応
