@@ -5,7 +5,9 @@ import jp.gecko655.earthquake.db.DatabaseOpenHelper;
 import jp.gecko655.earthquake.realtime.Yurekuru;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -24,6 +26,9 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
     final static String TAG = "EARTH_MAIN";
+    final static String YUREKURU_ENABLE = "YUREKURU_ENABLE";
+    
+    private SharedPreferences pref;
 
     public MainActivity() {
     }
@@ -41,7 +46,11 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
 
-        startService(new Intent(this,Yurekuru.class));
+        pref = this.getSharedPreferences(TAG, Context.MODE_PRIVATE);
+        if(pref.getBoolean(YUREKURU_ENABLE, false)){
+            startService(new Intent(this,Yurekuru.class));
+        }
+        
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment()).commit();
@@ -67,6 +76,10 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        if(pref.getBoolean(YUREKURU_ENABLE, false)){
+            MenuItem toggleYurekuru = menu.findItem(R.id.toggle_yurekuru);
+            toggleYurekuru.setTitle(R.string.yurekuru_on);
+        }
         return true;
     }
 
@@ -79,6 +92,18 @@ public class MainActivity extends Activity {
         if (id == R.id.action_auth) {
             startOauthActivity();
             return true;
+        }else if(id == R.id.toggle_yurekuru){
+            if(pref.getBoolean(YUREKURU_ENABLE, false)){
+                showToast("Earthquake notification is now OFF");
+                stopService(new Intent(this, Yurekuru.class));
+                item.setTitle(R.string.yurekuru_off);
+                pref.edit().putBoolean(YUREKURU_ENABLE, false).commit();
+            }else{
+                showToast("Earthquake notification is now ON");
+                startService(new Intent(this,Yurekuru.class));
+                item.setTitle(R.string.yurekuru_on);
+                pref.edit().putBoolean(YUREKURU_ENABLE, true).commit();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -243,11 +268,11 @@ public class MainActivity extends Activity {
             }
         }
 
-        private void showToast(String text) {
-            Toast.makeText(rootView.getContext(), text, Toast.LENGTH_SHORT)
-                    .show();
-        }
 
+    }
+    private void showToast(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT)
+                .show();
     }
 
 }

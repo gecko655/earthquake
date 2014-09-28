@@ -3,6 +3,7 @@
     <item name="twitter_oauth_button" type="id"/>
     <!-- menus -->
     <item type="id" name="action_auth"/>
+    <item type="id" name="toggle_yurekuru"/>
     <item type="id" name="action_reload"/>
 
     <!-- fragment main -->
