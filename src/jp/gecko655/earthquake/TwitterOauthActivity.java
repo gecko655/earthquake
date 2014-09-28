@@ -55,7 +55,7 @@ public class TwitterOauthActivity extends Activity {
             @Override
             protected String doInBackground(Void... params) {
                 try {
-                	mTwitter.setOAuthAccessToken(null);
+                    mTwitter.setOAuthAccessToken(null);
                     mRequestToken = mTwitter.getOAuthRequestToken(mCallbackURL);
                     return mRequestToken.getAuthorizationURL();
                 } catch (TwitterException e) {
@@ -92,7 +92,7 @@ public class TwitterOauthActivity extends Activity {
             @Override
             protected AccessToken doInBackground(String... params) {
                 try {
-                	Log.d("HEREEE",params[0]);
+                    Log.d("HEREEE",params[0]);
                     return mTwitter.getOAuthAccessToken(mRequestToken,
                             params[0]);
                 } catch (TwitterException e) {

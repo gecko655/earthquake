@@ -6,6 +6,8 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="action_settings">Settings</string>
     <string name="action_auth">Re-authentication</string>
+    <string name="yurekuru_on">Notification is now ON</string>
+    <string name="yurekuru_off">Notification is now OFF</string>
     <string name="action_reload">Re-load</string>
     <string name="oauth_button">OAuth</string>
     <string name="twitter_callback_url">earth://gecko655</string>

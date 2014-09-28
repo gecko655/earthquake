@@ -25,3 +25,4 @@ proguard/
 
 !*.jar
 string_secret.xml
+*~
